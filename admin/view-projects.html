@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | View Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/comman.css"/>
+    <link rel="stylesheet" href="../css/view-projects.css"/>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="update-profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="../langingPage.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><span class="role-badge role-admin">Admin</span></li>
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="user-mangement.html"><i class="fas fa-users"></i> User Management</a></li>
+                <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> Project management</a></li>
+                <li><a href="view-projects.html" class="active"><i class="fas fa-chart-line"></i> View Projects</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">View Projects</h2>
+                </div>
+                
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <h3><i class="fas fa-filter"></i> Filter Projects</h3>
+                    <div class="filter-options">
+                        <div class="filter-group">
+                            <label for="status-filter">Status</label>
+                            <select id="status-filter">
+                                <option value="">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="date-filter">Date Range</label>
+                            <select id="date-filter">
+                                <option value="">All Time</option>
+                                <option value="current">Current Projects</option>
+                                <option value="past">Past Projects</option>
+                                <option value="future">Upcoming Projects</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="search-projects">Search</label>
+                            <input type="text" id="search-projects" placeholder="Search by name or creator...">
+                        </div>
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="apply-filter-btn" id="apply-filters">
+                            <i class="fas fa-check"></i> Apply Filters
+                        </button>
+                        <button class="reset-filter-btn" id="reset-filters">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Projects Grid -->
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- Projects will be loaded here via JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Sample data - we'll use this to render the projects
+        const projects = [
+            { 
+                id: 1, 
+                name: 'Website Redesign', 
+                startDate: '2023-05-01', 
+                endDate: '2023-07-15', 
+                status: 'completed', 
+                createdBy: 'John Doe',
+                description: 'Complete overhaul of the company website with modern design and improved UX.',
+                progress: 100,
+                kpis: 8,
+                dataSources: 3
+            },
+            { 
+                id: 2, 
+                name: 'Mobile App Development', 
+                startDate: '2023-06-10', 
+                endDate: '2023-09-30', 
+                status: 'active', 
+                createdBy: 'Jane Smith',
+                description: 'Developing a new mobile application for both iOS and Android platforms.',
+                progress: 65,
+                kpis: 12,
+                dataSources: 5
+            },
+            { 
+                id: 3, 
+                name: 'CRM Implementation', 
+                startDate: '2023-07-15', 
+                endDate: '2023-10-20', 
+                status: 'pending', 
+                createdBy: 'Mike Johnson',
+                description: 'Implementation of a new Customer Relationship Management system.',
+                progress: 30,
+                kpis: 15,
+                dataSources: 7
+            },
+            { 
+                id: 4, 
+                name: 'Marketing Campaign', 
+                startDate: '2023-08-01', 
+                endDate: '2023-08-31', 
+                status: 'cancelled', 
+                createdBy: 'Sarah Williams',
+                description: 'Q3 Marketing campaign for new product launch.',
+                progress: 45,
+                kpis: 6,
+                dataSources: 2
+            },
+            { 
+                id: 5, 
+                name: 'Data Analytics Platform', 
+                startDate: '2023-09-01', 
+                endDate: '2023-12-31', 
+                status: 'active', 
+                createdBy: 'Robert Chen',
+                description: 'Building a new data analytics platform with advanced visualization capabilities.',
+                progress: 40,
+                kpis: 18,
+                dataSources: 9
+            },
+            { 
+                id: 6, 
+                name: 'Office Relocation', 
+                startDate: '2023-10-15', 
+                endDate: '2023-11-30', 
+                status: 'pending', 
+                createdBy: 'Emma Davis',
+                description: 'Planning and executing the relocation of headquarters to a new office space.',
+                progress: 15,
+                kpis: 5,
+                dataSources: 2
+            }
+        ];
+        
+        // DOM elements
+        const projectsGrid = document.getElementById('projectsGrid');
+        const statusFilter = document.getElementById('status-filter');
+        const dateFilter = document.getElementById('date-filter');
+        const searchInput = document.getElementById('search-projects');
+        const applyFiltersBtn = document.getElementById('apply-filters');
+        const resetFiltersBtn = document.getElementById('reset-filters');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects(projects);
+            
+            // Add event listeners
+            applyFiltersBtn.addEventListener('click', applyFilters);
+            resetFiltersBtn.addEventListener('click', resetFilters);
+        });
+        
+        // Render projects to the grid
+        function renderProjects(projectsToRender) {
+            projectsGrid.innerHTML = '';
+            
+            if (projectsToRender.length === 0) {
+                projectsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No Projects Found</h3>
+                        <p>Try adjusting your filters or creating a new project.</p>
+                        <a href="Project-management.html" class="view-dashboard-btn">
+                            <i class="fas fa-plus"></i> Create New Project
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            projectsToRender.forEach(project => {
+                // Determine status class
+                let statusClass = '';
+                switch (project.status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'cancelled': statusClass = 'status-cancelled'; break;
+                }
+                
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.innerHTML = `
+                    <div class="project-header">
+                        <h3 class="project-title">${project.name}</h3>
+                        <span class="project-status ${statusClass}">${capitalizeFirstLetter(project.status)}</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="project-info">
+                            <p class="project-description">${project.description}</p>
+                            <div class="project-info-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>${formatDate(project.startDate)} - ${formatDate(project.endDate)}</span>
+                            </div>
+                            <div class="project-info-item">
+                                <i class="fas fa-user"></i>
+                                <span>Created by: ${project.createdBy}</span>
+                            </div>
+                            <div class="project-info-item">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Progress: ${project.progress}%</span>
+                            </div>
+                            <div class="project-info-item">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>KPIs: ${project.kpis}</span>
+                            </div>
+                            <div class="project-info-item">
+                                <i class="fas fa-database"></i>
+                                <span>Data Sources: ${project.dataSources}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="view-dashboard-btn" onclick="navigateToProjectDashboard(${project.id})">
+                          <a href="projectView/project-dashboard.html">  <i class="fas fa-chart-line"></i> View Dashboard</a>
+                        </button>
+                    </div>
+                `;
+                
+                projectsGrid.appendChild(projectCard);
+            });
+        }
+        
+        // Apply filters to the projects
+        function applyFilters() {
+            const status = statusFilter.value;
+            const dateRange = dateFilter.value;
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            let filteredProjects = [...projects];
+            
+            // Filter by status
+            if (status) {
+                filteredProjects = filteredProjects.filter(project => project.status === status);
+            }
+            
+            // Filter by date range
+            if (dateRange) {
+                const today = new Date();
+                
+                switch (dateRange) {
+                    case 'current':
+                        filteredProjects = filteredProjects.filter(project => {
+                            const startDate = new Date(project.startDate);
+                            const endDate = new Date(project.endDate);
+                            return startDate <= today && endDate >= today;
+                        });
+                        break;
+                    case 'past':
+                        filteredProjects = filteredProjects.filter(project => {
+                            const endDate = new Date(project.endDate);
+                            return endDate < today;
+                        });
+                        break;
+                    case 'future':
+                        filteredProjects = filteredProjects.filter(project => {
+                            const startDate = new Date(project.startDate);
+                            return startDate > today;
+                        });
+                        break;
+                    // Custom range would need a date picker UI
+                }
+            }
+            
+            // Filter by search term
+            if (searchTerm) {
+                filteredProjects = filteredProjects.filter(project => 
+                    project.name.toLowerCase().includes(searchTerm) || 
+                    project.createdBy.toLowerCase().includes(searchTerm) ||
+                    project.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderProjects(filteredProjects);
+        }
+        
+        // Reset all filters
+        function resetFilters() {
+            statusFilter.value = '';
+            dateFilter.value = '';
+            searchInput.value = '';
+            renderProjects(projects);
+        }
+        
+        // Navigate to project dashboard
+        function navigateToProjectDashboard(projectId) {
+            // In a real application, this would redirect to the project dashboard page
+            // For this demo, we'll show a message
+            Swal.fire({
+                title: 'Navigating to Project Dashboard',
+                text: `You are viewing dashboard for project ID: ${projectId}`,
+                icon: 'info',
+                confirmButtonText: 'Okay'
+            }).then(() => {
+                // In a real app, you would redirect here
+                window.location.href = `project-dashboard.html?id=${projectId}`;
+            });
+        }
+        
+        // Helper functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+</html>

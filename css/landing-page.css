@@ -1,0 +1,137 @@
+:root {
+    --color-primary: #303d4a;
+    --color-secondary: #364e52;
+    --color-accent: #517971;
+    --color-light: #84a88e;
+    --color-highlight: #cdd0c7;
+}
+
+body {
+    max-height: 99.6vh;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Tajawal', sans-serif;
+    padding: 4rem;
+}
+
+.welcome-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 3rem;
+    color: var(--color-pastel);
+    margin-bottom: 1rem;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-pastel);
+}
+
+.welcome-text {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    color: var(--color-extra-light);
+}
+
+.role-cards {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.role-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 400px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--color-highlight);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.role-icon {
+    font-size: 3rem;
+    color: var(--color-highlight);
+    margin-bottom: 1rem;
+}
+
+.role-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-light);
+}
+
+.role-description {
+    color: var(--color-light);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.role-button {
+    background: linear-gradient(45deg, var(--color-accent), var(--color-highlight));
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.role-button:hover {
+    background: linear-gradient(45deg, var(--color-highlight), var(--color-soft));
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .welcome-container {
+        padding: 2rem 1rem;
+    }
+
+    .role-cards {
+        gap: 1rem;
+    }
+
+    .role-card {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+    }
+}
+
+.language-switch {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: var(--color-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-switch:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

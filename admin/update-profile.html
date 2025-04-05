@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | Strategic Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/comman.css"/>
+</head>
+<style>
+      :root {
+            --primary-color: #4361ee;
+            --danger-color: #f72585;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --info-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --sidebar-width: 250px;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .role-admin {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .main-content {
+
+            padding: 20px;
+            flex: 1;
+            transition: all 0.3s;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .profile-image {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary-color);
+            background-color: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-image .initials {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e07e0c;
+            transform: translateY(-2px);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: block;
+            padding: 10px 15px;
+            background-color: #f0f2f5;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-label:hover {
+            background-color: #e0e3e7;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+</style>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="update-profile.html" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="../langingPage.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><span class="role-badge role-admin">Admin</span></li>
+                <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="user-mangement.html"><i class="fas fa-users"></i> User Management</a></li>
+                <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> Project management</a></li>
+                <li><a href="view-projects.html" class="active"><i class="fas fa-chart-line"></i> View Projects</a></li>
+            
+              
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="card" id="profileContent">
+                <div class="card-header">
+                    <h2 class="card-title">My Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div class="profile-section">
+                        <div class="profile-image" id="avatarContainer">
+                            <img src="" alt="Profile Image" id="profileImage" style="display: none;">
+                            <div class="initials" id="avatarInitials">AU</div>
+                        </div>
+                        <div>
+                            <h3 id="profileName">Admin User</h3>
+                            <p id="profileRole">System Administrator</p>
+                        </div>
+                    </div>
+                    
+                    <form id="profileForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" class="form-control" value="Admin">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" value="User">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" value="admin@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" class="form-control" value="+1 (555) 123-4567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" class="form-control" rows="3">System administrator with full access rights</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Profile Picture</label>
+                            <div class="file-upload">
+                                <label for="avatar" class="file-upload-label">
+                                    <i class="fas fa-camera"></i> Choose Image
+                                </label>
+                                <input type="file" id="avatar" class="file-upload-input" accept="image/*">
+                            </div>
+                            <small class="text-muted">Recommended size: 200x200 pixels</small>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Profile
+                            </button>
+                            <button type="button" id="changePasswordBtn" class="btn btn-warning">
+                                <i class="fas fa-key"></i> Change Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // DOM Elements
+        const profileContent = document.getElementById('profileContent');
+        const profileForm = document.getElementById('profileForm');
+        const profileImage = document.getElementById('profileImage');
+        const avatarInitials = document.getElementById('avatarInitials');
+        const profileName = document.getElementById('profileName');
+        const avatarInput = document.getElementById('avatar');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        
+        // Toggle profile visibility
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            profileContent.style.display = profileContent.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Initialize profile data
+        function initProfile() {
+            const firstName = firstNameInput.value;
+            const lastName = lastNameInput.value;
+            
+            // Set avatar initials
+            updateAvatarInitials(firstName, lastName);
+            
+            // Set profile name
+            profileName.textContent = `${firstName} ${lastName}`;
+        }
+        
+        // Update avatar initials
+        function updateAvatarInitials(firstName, lastName) {
+            const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+            avatarInitials.textContent = initials;
+        }
+        
+        // Handle profile image upload
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (!file.type.match('image.*')) {
+                    Swal.fire('Error', 'Please select an image file', 'error');
+                    return;
+                }
+                
+                if (file.size > 2 * 1024 * 1024) {
+                    Swal.fire('Error', 'Image size should be less than 2MB', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    profileImage.src = event.target.result;
+                    profileImage.style.display = 'block';
+                    avatarInitials.style.display = 'none';
+                    
+                    // Show preview
+                    Swal.fire({
+                        title: 'Profile Picture',
+                        imageUrl: event.target.result,
+                        imageAlt: 'Profile image preview',
+                        showCancelButton: true,
+                        confirmButtonText: 'Use this image',
+                        cancelButtonText: 'Cancel',
+                    }).then((result) => {
+                        if (!result.isConfirmed) {
+                            profileImage.style.display = 'none';
+                            avatarInitials.style.display = 'block';
+                            avatarInput.value = '';
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Handle profile form submission
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+            
+            // Validate form
+            if (!firstName || !lastName || !email) {
+                Swal.fire('Error', 'Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                Swal.fire('Error', 'Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Update profile data
+            updateAvatarInitials(firstName, lastName);
+            profileName.textContent = `${firstName} ${lastName}`;
+            
+            setTimeout(() => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Profile Updated',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                
+                // If there's an image, set it as the default avatar
+                if (profileImage.src && profileImage.style.display !== 'none') {
+                    // In a real app, you would upload this to your server
+                    localStorage.setItem('profileImage', profileImage.src);
+                }
+            }, 1000);
+        });
+        
+        // Change password button
+        document.getElementById('changePasswordBtn').addEventListener('click', showChangePasswordModal);
+        
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Show change password modal
+        function showChangePasswordModal() {
+            Swal.fire({
+                title: 'Change Password',
+                html: `
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" class="swal2-input" placeholder="Current Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" class="swal2-input" placeholder="New Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Confirm New Password</label>
+                            <input type="password" id="confirmNewPassword" class="swal2-input" placeholder="Confirm New Password" required>
+                        </div>
+                    </form>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Change Password',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    const currentPassword = document.getElementById('currentPassword').value;
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+                    
+                    if (!currentPassword || !newPassword || !confirmNewPassword) {
+                        Swal.showValidationMessage('Please fill in all fields');
+                        return false;
+                    }
+                    
+                    if (newPassword !== confirmNewPassword) {
+                        Swal.showValidationMessage('New passwords do not match');
+                        return false;
+                    }
+                    
+                    if (newPassword.length < 8) {
+                        Swal.showValidationMessage('Password must be at least 8 characters');
+                        return false;
+                    }
+                    
+                    return { 
+                        currentPassword, 
+                        newPassword 
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Success!',
+                        'Your password has been changed.',
+                        'success'
+                    );
+                }
+            });
+        }
+        
+        // Check for saved profile image on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initProfile();
+            
+            const savedImage = localStorage.getItem('profileImage');
+            if (savedImage) {
+                profileImage.src = savedImage;
+                profileImage.style.display = 'block';
+                avatarInitials.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

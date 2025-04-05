@@ -1,0 +1,79 @@
+:root {
+    --color-primary: #303d4a;
+    --color-secondary: #364e52;
+    --color-accent: #517971;
+    --color-light: #84a88e;
+    --color-highlight: #cdd0c7;
+}
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.register-container {
+margin: auto;
+    background-color: var(--color-highlight); 
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.register-container h2 {
+    margin-bottom: 1.5rem;
+}
+.register-container .form-control {
+    background-color: rgb(232, 240, 254);
+    border: none;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+}
+.register-container .form-control::placeholder {
+    color: var(--color-extra-light);
+}
+.register-container .btn {
+    background-color: var(--color-secondary);
+    border: none;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.register-container .btn:hover {
+    background-color: var(--color-highlight);
+}
+.register-container .links {
+    margin-top: 1rem;
+}
+.register-container .links a {
+    color:#000;
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+.register-container .links a:hover {
+    text-decoration: underline;
+    color:#000;
+}
+.btn {
+    display: inline-block;
+    background-color: var(--color-accent);
+    color: var(--text-light);
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}

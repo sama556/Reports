@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/login.css"/>
+    <link rel="stylesheet" href="../css/home-page.css"/>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-computer"></i>
+                <span>Software Solution</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                   
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn" onclick="loggedIn()">
+                <a href="../manager/updateprofile.html">Login</a>
+            </button>
+        </form>
+        <div class="links">
+            <a href="forgetPassword.html">Forgot your password?</a>
+        </div>
+    </div>
+  
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Software Solution</h3>
+                    <p>Bridging technology and sustainability to create solutions that work for your business and the planet.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Risk Assessment</a></li>
+                        <li><a href="#">Resource Tools</a></li>
+                        <li><a href="#">Task Management</a></li>
+                        <li><a href="#">Reporting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Subscribe</h3>
+                    <p>Join our newsletter for sustainability tips and updates.</p>
+                    <form class="subscribe-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit" class="btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 software. All rights reserved. <a href="#" style="color:#84a88e;">Privacy Policy</a> | <a href="#" style="color: #84a88e;">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
