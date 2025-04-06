@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | KPI Management</title>
+    <link rel="stylesheet" href="../../css/comman.css"/>
+    <link rel="stylesheet" href="../../css/budget.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="../view-projects.html"><i class="fas fa-arrow-left"></i> Back</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="project-info">
+                <h2 id="projectName">Project Name</h2>
+                <span class="project-status" id="projectStatus">Active</span>
+                
+                <div class="project-meta">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-user"></i>
+                    <span id="projectCreator">Created by: John Doe</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="../../manager/viewProject/project-dashboard.html" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../../manager/viewProject/risks.html"><i class="fas fa-exclamation-triangle"></i> Risks</a></li>
+                <li><a href="../../manager/viewProject/kpis.html" id="kpisLink"><i class="fas fa-bullseye"></i> KPIs</a></li>
+                <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
+                <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
+                <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
+                <li><a href="../../manager/viewProject/budget.html" class="active"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="container">
+                    <div class="header">
+                        <h1>Project Budget Status</h1>
+                        <button class="export-btn" id="exportBtn">
+                            <i class="fas fa-file-export"></i> Export Report
+                        </button>
+                    </div>
+                    
+                    <div class="budget-dashboard">
+                        <div class="budget-card total-budget">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fas fa-wallet"></i>
+                                    Total Budget
+                                </div>
+                            </div>
+                            <div class="card-value" id="totalBudget">$25,000.00</div>
+                            <div class="card-footer">
+                                Allocated for project completion
+                            </div>
+                        </div>
+                        
+                        <div class="budget-card spent-amount">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    Spent Amount
+                                </div>
+                            </div>
+                            <div class="card-value" id="spentAmount">$18,750.00</div>
+                            <div class="card-footer">
+                                75% of total budget
+                            </div>
+                        </div>
+                        
+                        <div class="budget-card remaining-amount">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <i class="fas fa-piggy-bank"></i>
+                                    Remaining Amount
+                                </div>
+                            </div>
+                            <div class="card-value" id="remainingAmount">$6,250.00</div>
+                            <div class="card-footer">
+                                25% of total budget remaining
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="budget-progress">
+                        <div class="progress-header">
+                            <div class="progress-title">
+                                Budget Utilization
+                            </div>
+                            <div class="progress-percentage" id="utilizationPercentage">
+                                75% utilized
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill spent-progress" id="spentProgress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-labels">
+                            <span>$0</span>
+                            <span>$25,000</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                Budget Overview
+                            </div>
+                            <div class="chart-actions">
+                                <button class="chart-btn" id="pieChartBtn">
+                                    <i class="fas fa-chart-pie"></i> Pie Chart
+                                </button>
+                                <button class="chart-btn" id="barChartBtn">
+                                    <i class="fas fa-chart-bar"></i> Bar Chart
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                    
+                    <div class="transactions-container">
+                        <div class="transactions-header">
+                            <div class="transactions-title">
+                                Recent Transactions
+                            </div>
+                            <button class="view-all-btn" id="viewAllBtn">
+                                <i class="fas fa-list"></i> View All Transactions
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTable">
+                                <tr>
+                                    <td>2023-05-15</td>
+                                    <td>Web Development Services</td>
+                                    <td>Development</td>
+                                    <td class="amount expense">-$5,000.00</td>
+                                    <td class="transaction-actions">
+                                        <button class="action-btn view-btn" data-id="1">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-05-10</td>
+                                    <td>Cloud Hosting Subscription</td>
+                                    <td>Infrastructure</td>
+                                    <td class="amount expense">-$1,200.00</td>
+                                    <td class="transaction-actions">
+                                        <button class="action-btn view-btn" data-id="2">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-05-05</td>
+                                    <td>Additional Funding</td>
+                                    <td>Income</td>
+                                    <td class="amount income">+$3,000.00</td>
+                                    <td class="transaction-actions">
+                                        <button class="action-btn view-btn" data-id="3">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-05-01</td>
+                                    <td>UI/UX Design Package</td>
+                                    <td>Design</td>
+                                    <td class="amount expense">-$3,500.00</td>
+                                    <td class="transaction-actions">
+                                        <button class="action-btn view-btn" data-id="4">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-04-28</td>
+                                    <td>Team Training Workshop</td>
+                                    <td>Training</td>
+                                    <td class="amount expense">-$1,800.00</td>
+                                    <td class="transaction-actions">
+                                        <button class="action-btn view-btn" data-id="5">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+    <script>
+        // Budget data
+        const budgetData = {
+            totalBudget: 25000,
+            spentAmount: 18750,
+            remainingAmount: 6250,
+            utilizationPercentage: 75,
+            transactions: [
+                {
+                    id: 1,
+                    date: '2023-05-15',
+                    description: 'Web Development Services',
+                    category: 'Development',
+                    amount: -5000,
+                    type: 'expense',
+                    notes: 'Payment for sprint #3 deliverables'
+                },
+                {
+                    id: 2,
+                    date: '2023-05-10',
+                    description: 'Cloud Hosting Subscription',
+                    category: 'Infrastructure',
+                    amount: -1200,
+                    type: 'expense',
+                    notes: 'Annual subscription for cloud services'
+                },
+                {
+                    id: 3,
+                    date: '2023-05-05',
+                    description: 'Additional Funding',
+                    category: 'Income',
+                    amount: 3000,
+                    type: 'income',
+                    notes: 'Additional funding approved by client'
+                },
+                {
+                    id: 4,
+                    date: '2023-05-01',
+                    description: 'UI/UX Design Package',
+                    category: 'Design',
+                    amount: -3500,
+                    type: 'expense',
+                    notes: 'Final payment for design services'
+                },
+                {
+                    id: 5,
+                    date: '2023-04-28',
+                    description: 'Team Training Workshop',
+                    category: 'Training',
+                    amount: -1800,
+                    type: 'expense',
+                    notes: 'Advanced React training for dev team'
+                }
+            ]
+        };
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+        
+        // Initialize chart
+        let budgetChart;
+        
+        function initPieChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            if (budgetChart) {
+                budgetChart.destroy();
+            }
+            
+            budgetChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Spent Amount', 'Remaining Amount'],
+                    datasets: [{
+                        data: [budgetData.spentAmount, budgetData.remainingAmount],
+                        backgroundColor: [
+                            '#ff5b5b',
+                            '#6bd968'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / budgetData.totalBudget) * 100);
+                                    return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function initBarChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            if (budgetChart) {
+                budgetChart.destroy();
+            }
+            
+            budgetChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total Budget', 'Spent Amount', 'Remaining Amount'],
+                    datasets: [{
+                        label: 'Budget Overview',
+                        data: [budgetData.totalBudget, budgetData.spentAmount, budgetData.remainingAmount],
+                        backgroundColor: [
+                            '#4a6bdf',
+                            '#ff5b5b',
+                            '#6bd968'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${formatCurrency(value)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update budget data display
+        function updateBudgetDisplay() {
+            document.getElementById('totalBudget').textContent = formatCurrency(budgetData.totalBudget);
+            document.getElementById('spentAmount').textContent = formatCurrency(budgetData.spentAmount);
+            document.getElementById('remainingAmount').textContent = formatCurrency(budgetData.remainingAmount);
+            document.getElementById('utilizationPercentage').textContent = `${budgetData.utilizationPercentage}% utilized`;
+            
+            // Update progress bar
+            document.getElementById('spentProgress').style.width = `${budgetData.utilizationPercentage}%`;
+            
+            // Check for overspending
+            if (budgetData.remainingAmount < 0) {
+                document.querySelector('.remaining-amount').classList.add('overspent');
+                document.querySelector('.remaining-amount .card-title i').className = 'fas fa-exclamation-triangle';
+                document.querySelector('.remaining-amount .card-footer').textContent = 
+                    `Overspent by ${formatCurrency(Math.abs(budgetData.remainingAmount))}`;
+            }
+        }
+        
+        // Handle transaction view
+        function handleViewTransaction(e) {
+            const transactionId = parseInt(e.currentTarget.dataset.id);
+            const transaction = budgetData.transactions.find(t => t.id === transactionId);
+            
+            Swal.fire({
+                title: 'Transaction Details',
+                html: `
+                    <div style="text-align: left;">
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="margin-bottom: 5px; color: ${transaction.type === 'expense' ? '#ff5b5b' : '#6bd968'}">
+                                ${transaction.description}
+                            </h4>
+                            <p style="color: #7f8c8d;">${transaction.date}</p>
+                        </div>
+                        <table style="width: 100%; margin-bottom: 15px;">
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: 500;">Category:</td>
+                                <td style="padding: 5px 0;">${transaction.category}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: 500;">Amount:</td>
+                                <td style="padding: 5px 0; color: ${transaction.type === 'expense' ? '#ff5b5b' : '#6bd968'}; font-weight: 500;">
+                                    ${formatCurrency(transaction.amount)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: 500;">Type:</td>
+                                <td style="padding: 5px 0; text-transform: capitalize;">${transaction.type}</td>
+                            </tr>
+                        </table>
+                        <div style="margin-top: 15px;">
+                            <h5 style="margin-bottom: 5px;">Notes:</h5>
+                            <p>${transaction.notes}</p>
+                        </div>
+                    </div>
+                `,
+                confirmButtonColor: '#4a6bdf',
+                confirmButtonText: 'Close'
+            });
+        }
+        
+        // Handle export report
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Export Budget Report',
+                html: `
+                    <div style="text-align: left; margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Format</label>
+                        <select id="exportFormat" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                            <option value="pdf">PDF Document</option>
+                            <option value="excel">Excel Spreadsheet</option>
+                            <option value="csv">CSV File</option>
+                        </select>
+                    </div>
+                    <div style="text-align: left;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">Date Range</label>
+                        <select id="exportDateRange" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                            <option value="all">All Time</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Export',
+                confirmButtonColor: '#4a6bdf',
+                preConfirm: () => {
+                    return {
+                        format: document.getElementById('exportFormat').value,
+                        dateRange: document.getElementById('exportDateRange').value
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Report Generated',
+                        text: `Your ${result.value.format.toUpperCase()} report for ${result.value.dateRange} is ready for download.`,
+                        confirmButtonColor: '#4a6bdf',
+                        confirmButtonText: 'Download'
+                    });
+                }
+            });
+        });
+        
+        // Handle view all transactions
+        document.getElementById('viewAllBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'All Transactions',
+                text: 'This would link to a full transaction history page in a real application.',
+                confirmButtonColor: '#4a6bdf'
+            });
+        });
+        
+        // Handle chart type buttons
+        document.getElementById('pieChartBtn').addEventListener('click', initPieChart);
+        document.getElementById('barChartBtn').addEventListener('click', initBarChart);
+        
+        // Add event listeners to view buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', handleViewTransaction);
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBudgetDisplay();
+            initPieChart();
+        });
+    </script>
+</body>
+</html>

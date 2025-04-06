@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | KPI Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../../css/comman.css"/>
+    <link rel="stylesheet" href="../../css/report.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="../view-projects.html"><i class="fas fa-arrow-left"></i> Back</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="project-info">
+                <h2 id="projectName">Project Name</h2>
+                <span class="project-status" id="projectStatus">Active</span>
+                
+                <div class="project-meta">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-user"></i>
+                    <span id="projectCreator">Created by: John Doe</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="../../manager/viewProject/project-dashboard.html" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../../manager/viewProject/risks.html"><i class="fas fa-exclamation-triangle"></i> Risks</a></li>
+                <li><a href="../../manager/viewProject/kpis.html" id="kpisLink"><i class="fas fa-bullseye"></i> KPIs</a></li>
+                <li><a href="../../manager/viewProject/Sales-Performance.html" class="active"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
+                <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
+                <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
+                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="container">
+                    <h1>Sales Performance Management</h1>
+            
+               
+            
+                    <div class="actions">
+                        <button onclick="showAddForm()" class="action-btn">Add Report</button>
+                    </div>
+            
+                    <table id="salesTable" class="sales-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Product/Service Sold</th>
+                                <th>Quantity Sold</th>
+                                <th>Revenue</th>
+                                <th>Salesperson</th>
+                                <th>Region</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <!-- Sales data will be dynamically added here -->
+                        </tbody>
+                    </table>
+            
+                    <!-- Modal for Add/Edit Form -->
+                    <div id="salesModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <h2 id="modalTitle">Add Sales Report</h2>
+                            <form id="salesForm">
+                                <div class="form-group">
+                                    <label for="saleDate">Date:</label>
+                                    <input type="date" id="saleDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product">Product/Service Sold:</label>
+                                    <input type="text" id="product" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity Sold:</label>
+                                    <input type="number" id="quantity" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="revenue">Revenue:</label>
+                                    <input type="number" step="0.01" id="revenue" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="salesperson">Salesperson:</label>
+                                    <input type="text" id="salesperson" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="region">Region/Location:</label>
+                                    <select id="region" required>
+                                        <option value="North">North</option>
+                                        <option value="South">South</option>
+                                        <option value="East">East</option>
+                                        <option value="West">West</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="submit-btn">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const salesTableBody = document.getElementById('salesTableBody');
+            const salesForm = document.getElementById('salesForm');
+            const salesModal = document.getElementById('salesModal');
+            let salesData = [];
+            let currentEditId = null;
+
+            // Add initial sample data
+            function addSampleData() {
+                salesData = [
+                    {
+                        id: 1,
+                        date: '2023-10-01',
+                        product: 'Product A',
+                        quantity: 10,
+                        revenue: 1000,
+                        salesperson: 'John Doe',
+                        region: 'North'
+                    },
+                    {
+                        id: 2,
+                        date: '2023-10-02',
+                        product: 'Product B',
+                        quantity: 15,
+                        revenue: 1500,
+                        salesperson: 'Jane Smith',
+                        region: 'South'
+                    },
+                    {
+                        id: 3,
+                        date: '2023-10-03',
+                        product: 'Product C',
+                        quantity: 8,
+                        revenue: 800,
+                        salesperson: 'Mike Johnson',
+                        region: 'East'
+                    }
+                ];
+                updateTable();
+            }
+
+            // Update table with current data
+            function updateTable() {
+                salesTableBody.innerHTML = '';
+                salesData.forEach(sale => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${sale.date}</td>
+                        <td>${sale.product}</td>
+                        <td>${sale.quantity}</td>
+                        <td>$${sale.revenue.toFixed(2)}</td>
+                        <td>${sale.salesperson}</td>
+                        <td>${sale.region}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editSale(${sale.id})"> <i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteSale(${sale.id})">  <i class="fas fa-trash-alt"></i> </button>
+                        </td>
+                    `;
+                    salesTableBody.appendChild(row);
+                });
+            }
+
+            // Show Add Form
+            window.showAddForm = function() {
+                currentEditId = null;
+                document.getElementById('modalTitle').textContent = 'Add Sales Report';
+                document.getElementById('saleDate').value = '';
+                document.getElementById('product').value = '';
+                document.getElementById('quantity').value = '';
+                document.getElementById('revenue').value = '';
+                document.getElementById('salesperson').value = '';
+                document.getElementById('region').value = 'North';
+                salesModal.style.display = 'block';
+            };
+
+            // Show Edit Form
+            window.showEditForm = function() {
+                if (salesData.length === 0) {
+                    Swal.fire('Info', 'No sales data available to edit', 'info');
+                    return;
+                }
+                
+                Swal.fire({
+                    title: 'Select Sale to Edit',
+                    input: 'select',
+                    inputOptions: salesData.reduce((options, sale) => {
+                        options[sale.id] = `${sale.date} - ${sale.product} (${sale.salesperson})`;
+                        return options;
+                    }, {}),
+                    showCancelButton: true,
+                    confirmButtonText: 'Edit'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const id = parseInt(result.value);
+                        const sale = salesData.find(s => s.id === id);
+                        if (sale) {
+                            currentEditId = id;
+                            document.getElementById('modalTitle').textContent = 'Edit Sales Report';
+                            document.getElementById('saleDate').value = sale.date;
+                            document.getElementById('product').value = sale.product;
+                            document.getElementById('quantity').value = sale.quantity;
+                            document.getElementById('revenue').value = sale.revenue;
+                            document.getElementById('salesperson').value = sale.salesperson;
+                            document.getElementById('region').value = sale.region;
+                            salesModal.style.display = 'block';
+                        }
+                    }
+                });
+            };
+
+            // Edit specific sale
+            window.editSale = function(id) {
+                const sale = salesData.find(s => s.id === id);
+                if (sale) {
+                    currentEditId = id;
+                    document.getElementById('modalTitle').textContent = 'Edit Sales Report';
+                    document.getElementById('saleDate').value = sale.date;
+                    document.getElementById('product').value = sale.product;
+                    document.getElementById('quantity').value = sale.quantity;
+                    document.getElementById('revenue').value = sale.revenue;
+                    document.getElementById('salesperson').value = sale.salesperson;
+                    document.getElementById('region').value = sale.region;
+                    salesModal.style.display = 'block';
+                }
+            };
+
+            // Handle form submission
+            salesForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const saleData = {
+                    date: document.getElementById('saleDate').value,
+                    product: document.getElementById('product').value,
+                    quantity: parseInt(document.getElementById('quantity').value),
+                    revenue: parseFloat(document.getElementById('revenue').value),
+                    salesperson: document.getElementById('salesperson').value,
+                    region: document.getElementById('region').value
+                };
+                
+                if (currentEditId) {
+                    // Update existing sale
+                    const index = salesData.findIndex(s => s.id === currentEditId);
+                    if (index !== -1) {
+                        salesData[index] = { ...saleData, id: currentEditId };
+                        Swal.fire('Success', 'Sale report updated successfully!', 'success');
+                    }
+                } else {
+                    // Add new sale
+                    const newId = salesData.length > 0 ? Math.max(...salesData.map(s => s.id)) + 1 : 1;
+                    salesData.push({ ...saleData, id: newId });
+                    Swal.fire('Success', 'Sale report added successfully!', 'success');
+                }
+                
+                updateTable();
+                closeModal();
+            });
+
+            // Delete sale
+            window.deleteSale = function(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        salesData = salesData.filter(s => s.id !== id);
+                        updateTable();
+                        Swal.fire('Deleted!', 'Sale report has been deleted.', 'success');
+                    }
+                });
+            };
+
+            // Close modal
+            window.closeModal = function() {
+                salesModal.style.display = 'none';
+                currentEditId = null;
+            };
+
+            addSampleData();
+        });
+    </script>
+</body>
+</html>

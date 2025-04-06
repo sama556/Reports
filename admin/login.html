@@ -3,11 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | Software Solution</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/login.css"/>
-    <link rel="stylesheet" href="../css/home-page.css"/>
+    <style>
+        :root {
+            --color-primary: #303d4a;
+            --color-secondary: #364e52;
+            --color-accent: #517971;
+            --color-light: #84a88e;
+            --color-highlight: #cdd0c7;
+            --color-success: #27ae60;
+            --color-warning: #f39c12;
+            --color-danger: #e74c3c;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-highlight);
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: var(--color-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--color-light);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover {
+            color: var(--color-light);
+        }
+        
+        .login-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 2.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease-in-out;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .login-container h2 {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 0.25rem rgba(81, 121, 113, 0.25);
+        }
+        
+        .btn {
+            background-color: var(--color-accent);
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            display: block;
+        }
+        
+        .btn:hover {
+            background-color: var(--color-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .links a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: var(--color-primary);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-col h3 {
+            color: var(--color-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-col ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-col ul li a:hover {
+            color: var(--color-light);
+            padding-left: 5px;
+        }
+        
+        .subscribe-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: none;
+            border-radius: 6px;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin: 0 0.75rem;
+            }
+            
+            .login-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,27 +249,28 @@
                     <li><a href="#about">About</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact</a></li>
-                   
                 </ul>
             </nav>
         </div>
     </header>
 
     <div class="login-container">
-        <h2>Login</h2>
+        <h2>Login to Your Account</h2>
         <form>
             <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Username" required>
+                <input type="text" class="form-control" placeholder="Username or Email" required>
             </div>
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="Password" required>
             </div>
-            <button type="submit" class="btn" onclick="loggedIn()">
-                <a href="../admin/update-profile.html">Login</a>
-            </button>
+            <button type="submit" class="btn" onclick="loggedIn()"><a href="../admin/update-profile.html">log in</a></button>
         </form>
         <div class="links">
             <a href="forgetPassword.html">Forgot your password?</a>
+            <div style="margin-top: 1rem;">
+                <span>Don't have an account? </span>
+                <a href="../sginup.html">Sign up</a>
+            </div>
         </div>
     </div>
   
@@ -79,9 +308,18 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 software. All rights reserved. <a href="#" style="color:#84a88e;">Privacy Policy</a> | <a href="#" style="color: #84a88e;">Terms of Service</a></p>
+                <p>&copy; 2025 software. All rights reserved. <a href="#" style="color: var(--color-light);">Privacy Policy</a> | <a href="#" style="color: var(--color-light);">Terms of Service</a></p>
             </div>
         </div>
     </footer>
+
+    <script>
+        function loggedIn() {
+            // Add your login functionality here
+            console.log("Login submitted");
+            // In a real implementation, you would validate credentials first
+            window.location.href = "../admin/update-profile.html";
+        }
+    </script>
 </body>
 </html>

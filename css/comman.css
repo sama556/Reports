@@ -215,11 +215,56 @@ nav a:hover::after {
     }
 }
 .project-info {
-    padding: 0 20px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
 }
 
 .project-info h2 {
-    margin: 0 0 10px;
-    font-size: 1.2rem;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    color: var(--secondary-color);
+}
+
+.project-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: var(--success-color);
+    color: white;
+}
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+   
+}
+
+.project-meta i {
+    margin-right: 0.5rem;
+    width: 20px;
+    text-align: center;
+    color: var(--primary-color);
+}
+.swal2-popup .swal2-input, 
+.swal2-popup .swal2-textarea,
+.swal2-popup .swal2-select {
+    margin: 8px 0;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.swal2-popup .swal2-textarea {
+    min-height: 100px;
+}
+
+.swal2-popup .form-row {
+    display: flex;
+    gap: 10px;
 }

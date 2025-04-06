@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StratAnalytica | Project Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../../css/comman.css"/>
-    <link rel="stylesheet" href="../../css/dashboard.css">
+    <!-- Chart.js with zoom plugin -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-  
+    <link rel="stylesheet" href="../../css/comman.css"/>
+    <link rel="stylesheet" href="../../css/dashboard.css">
 </head>
 <body>
     <header>
@@ -26,6 +26,7 @@
             </nav>
         </div>
     </header>
+
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -48,10 +49,16 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li><a href="../../admin/viewProject/project-dashboard.html" class="active" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="../../admin/projectView/datasource.html"><i class="fas fa-database"></i> Data Sources</a></li>
-                <li><a href="../../admin/projectView/kpis.html"><i class="fas fa-tachometer-alt"></i> KPIs</a></li>
-                <li><a href="../../admin/projectView/notifiaction.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manger/projectView/project-dashboard.html" class="active" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../../manager/viewProject/risks.html"><i class="fas fa-exclamation-triangle"></i> Risks</a></li>
+                <li><a href="../../manager/viewProject/kpis.html" id="kpisLink"><i class="fas fa-bullseye"></i> KPIs</a></li>
+                <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
+                <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
+                <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
+                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
+            </ul>
             </ul>
         </aside>
 
@@ -838,26 +845,32 @@
         }
         
         // Toggle between chart views
-        function toggleView(chartId) {
-            const chart = charts[chartId];
-            
-            if (chart.config.type === 'pie') {
-                chart.config.type = 'bar';
-            } else if (chart.config.type === 'bar') {
-                chart.config.type = 'line';
-            } else {
-                chart.config.type = 'pie';
-            }
-            
-            chart.update();
-        }
-        
-        // Reset zoom on chart
-        function resetZoom(chartId) {
-            if (charts[chartId].resetZoom) {
-                charts[chartId].resetZoom();
-            }
-        }
+        function exportChart(chartId) {
+    const link = document.createElement('a');
+    link.download = `${charts[chartId].options.plugins.title.text}.png`;
+    link.href = document.getElementById(chartId).toDataURL('image/png');
+    link.click();
+}
+
+function toggleView(chartId) {
+    const chart = charts[chartId];
+    
+    if (chart.config.type === 'pie') {
+        chart.config.type = 'bar';
+    } else if (chart.config.type === 'bar') {
+        chart.config.type = 'line';
+    } else {
+        chart.config.type = 'pie';
+    }
+    
+    chart.update();
+}
+
+function resetZoom(chartId) {
+    if (charts[chartId].resetZoom) {
+        charts[chartId].resetZoom();
+    }
+}
     </script>
 </body>
 </html>

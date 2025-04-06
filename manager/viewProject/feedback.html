@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | Feedback Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/comman.css"/>
+    <link rel="stylesheet" href="../../css/feedback.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="../view-projects.html"><i class="fas fa-arrow-left"></i> Back</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="project-info">
+                <h2 id="projectName">Market Expansion Project</h2>
+                <span class="project-status" id="projectStatus">Active</span>
+                
+                <div class="project-meta">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-user"></i>
+                    <span id="projectCreator">Created by: Ali</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="../../manager/viewProject/project-dashboard.html" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../../manager/viewProject/risks.html"><i class="fas fa-exclamation-triangle"></i> Risks</a></li>
+                <li><a href="../../manager/viewProject/kpis.html" id="kpisLink"><i class="fas fa-bullseye"></i> KPIs</a></li>
+                <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
+                <li><a href="../../manager/viewProject/feedback.html" class="active"><i class="fas fa-comment"></i> Feedback</a></li>
+                <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
+                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="feedback-header">
+                <h1>Feedback and Improvement Management</h1>
+                <button class="add-btn" id="addFeedbackBtn"><i class="fas fa-plus"></i> Add New Feedback</button>
+            </div>
+            
+            <div class="feedback-stats">
+                <div class="stat-card">
+                    <div class="stat-title">Total Feedback</div>
+                    <div class="stat-value" id="totalFeedback">0</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> <span id="feedbackTrend">0%</span> from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Open Issues</div>
+                    <div class="stat-value" id="openIssues">0</div>
+                    <div class="stat-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> <span id="openIssuesTrend">0%</span> from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Average Resolution Time</div>
+                    <div class="stat-value" id="avgResolutionTime">0 days</div>
+                    <div class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> <span id="resolutionTrend">0 days</span> improvement
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">High Priority Items</div>
+                    <div class="stat-value" id="highPriority">0</div>
+                    <div class="stat-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> <span id="highPriorityTrend">0</span> resolved this week
+                    </div>
+                </div>
+            </div>
+            
+       
+            <div class="feedback-cards" id="feedbackContainer">
+                <!-- Feedback cards will be dynamically inserted here -->
+            </div>
+            
+            <!-- New Feedback Form -->
+            <div class="feedback-form-container" id="newFeedbackForm" style="display: none;">
+                <div class="form-title">
+                    <i class="fas fa-comment-dots"></i>
+                    <h2>Add New Feedback</h2>
+                </div>
+                <form class="feedback-form" id="feedbackForm">
+                    <div class="form-group">
+                        <label for="feedbackDate">Date</label>
+                        <input type="date" id="feedbackDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackSource">Source of Feedback</label>
+                        <select id="feedbackSource" required>
+                            <option value="">Select a source</option>
+                            <option value="Customer Survey">Customer Survey</option>
+                            <option value="Focus Group">Focus Group</option>
+                            <option value="Social Media">Social Media</option>
+                            <option value="Customer Support">Customer Support</option>
+                            <option value="Team Member">Team Member</option>
+                            <option value="Email Survey">Email Survey</option>
+                            <option value="Direct Customer">Direct Customer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="feedbackDescription">Description</label>
+                        <textarea id="feedbackDescription" placeholder="Detailed description of the feedback..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackPriority">Priority</label>
+                        <select id="feedbackPriority" required>
+                            <option value="">Select priority</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignedTo">Assign To</label>
+                        <select id="assignedTo" required>
+                            <option value="">Select team member</option>
+                            <option value="Sami Alharbi">Sami Alharbi</option>
+                            <option value="Layla Mahmoud">Layla Mahmoud</option>
+                            <option value="Nasser Faisal">Nasser Faisal</option>
+                            <option value="Omar Khalid">Omar Khalid</option>
+                            <option value="Amira Hassan">Amira Hassan</option>
+                            <option value="Khalid Rahman">Khalid Rahman</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="submit-btn">Submit Feedback</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Empty state (hidden by default) -->
+            
+        </main>
+    </div>
+    
+    <!-- Feedback Detail Modal -->
+    <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackDetailModalLabel">Feedback Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="feedbackDetailContent">
+                    <!-- Content will be dynamically inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Note Modal -->
+    <div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNoteModalLabel">Add Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="noteForm">
+                        <div class="mb-3">
+                            <label for="noteDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="noteDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="noteContent" class="form-label">Note Content</label>
+                            <textarea class="form-control" id="noteContent" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Feedback Modal -->
+   
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+   <script>
+    let feedbackData = [
+    {
+        id: 1,
+        date: '2023-04-02',
+        source: 'Customer Survey',
+        description: 'Users are experiencing long loading times when accessing the product catalog on mobile devices.',
+        priority: 'high',
+        status: 'open',
+        assignedTo: 'Sami Alharbi',
+        notes: [],
+        actionTaken: '',
+        resolutionDate: ''
+    },
+    {
+        id: 2,
+        date: '2023-03-28',
+        source: 'Focus Group',
+        description: 'Customers would like to see additional payment options including local payment methods.',
+        priority: 'medium',
+        status: 'in-progress',
+        assignedTo: 'Layla Mahmoud',
+        notes: [
+            {
+                date: '2023-03-30',
+                content: 'Researching most requested payment methods in target markets.'
+            }
+        ],
+        actionTaken: 'Started researching payment gateway options',
+        resolutionDate: ''
+    },
+    {
+        id: 3,
+        date: '2023-03-25',
+        source: 'Team Member',
+        description: 'Website analytics show users spending little time on our About Us page. Consider refreshing the content.',
+        priority: 'low',
+        status: 'resolved',
+        assignedTo: 'Nasser Faisal',
+        notes: [
+            {
+                date: '2023-03-27',
+                content: 'Content rewrite completed and deployed.'
+            }
+        ],
+        actionTaken: 'Rewrote About Us page content with more engaging messaging',
+        resolutionDate: '2023-03-27'
+    },
+    {
+        id: 4,
+        date: '2023-03-20',
+        source: 'Customer Support',
+        description: 'Multiple customers reporting checkout errors when using Internet Explorer. Payment processing fails.',
+        priority: 'high',
+        status: 'in-progress',
+        assignedTo: 'Omar Khalid',
+        notes: [
+            {
+                date: '2023-03-22',
+                content: 'Identified compatibility issue with IE11. Working on fix.'
+            }
+        ],
+        actionTaken: 'Identified IE11 specific JavaScript issues',
+        resolutionDate: ''
+    },
+    {
+        id: 5,
+        date: '2023-03-15',
+        source: 'Social Media',
+        description: 'Several comments on Instagram requesting expanded size options for our product line.',
+        priority: 'medium',
+        status: 'open',
+        assignedTo: 'Amira Hassan',
+        notes: [],
+        actionTaken: '',
+        resolutionDate: ''
+    },
+    {
+        id: 6,
+        date: '2023-03-10',
+        source: 'Email Survey',
+        description: 'Customers have suggested including a feature to save favorite items for later viewing.',
+        priority: 'low',
+        status: 'resolved',
+        assignedTo: 'Khalid Rahman',
+        notes: [
+            {
+                date: '2023-03-14',
+                content: 'Wishlist feature implemented and deployed.'
+            }
+        ],
+        actionTaken: 'Developed and deployed wishlist feature',
+        resolutionDate: '2023-03-14'
+    }
+];
+
+// DOM Elements
+const feedbackContainer = document.getElementById('feedbackContainer');
+const addFeedbackBtn = document.getElementById('addFeedbackBtn');
+const newFeedbackForm = document.getElementById('newFeedbackForm');
+const feedbackForm = document.getElementById('feedbackForm');
+const feedbackDetailModal = new bootstrap.Modal(document.getElementById('feedbackDetailModal'));
+const addNoteModal = new bootstrap.Modal(document.getElementById('addNoteModal'));
+
+// Stats elements
+const totalFeedbackEl = document.getElementById('totalFeedback');
+const openIssuesEl = document.getElementById('openIssues');
+const avgResolutionTimeEl = document.getElementById('avgResolutionTime');
+const highPriorityEl = document.getElementById('highPriority');
+const feedbackTrendEl = document.getElementById('feedbackTrend');
+const openIssuesTrendEl = document.getElementById('openIssuesTrend');
+const resolutionTrendEl = document.getElementById('resolutionTrend');
+const highPriorityTrendEl = document.getElementById('highPriorityTrend');
+
+const saveNoteBtn = document.getElementById('saveNoteBtn');
+
+// Current selected feedback ID for modals
+let currentFeedbackId = null;
+
+// Initialize date pickers
+flatpickr("#feedbackDate", {
+    defaultDate: "today",
+    dateFormat: "Y-m-d"
+});
+
+flatpickr("#noteDate", {
+    defaultDate: "today",
+    dateFormat: "Y-m-d"
+});
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    renderFeedbackCards(feedbackData);
+    updateStats();
+    
+    // Set default date for new feedback form
+    document.getElementById('feedbackDate').value = new Date().toISOString().split('T')[0];
+    
+    // Set default date for note form
+    document.getElementById('noteDate').value = new Date().toISOString().split('T')[0];
+    
+    // Add event listener for note button
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', saveNote);
+    }
+});
+
+// Render feedback cards
+function renderFeedbackCards(feedbackItems) {
+    feedbackContainer.innerHTML = '';
+    
+    if (feedbackItems.length === 0) {
+        const emptyState = `
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-comment-slash"></i>
+                </div>
+                <h3>No Feedback Yet</h3>
+                <p>Start collecting feedback to improve your project.</p>
+                <button class="add-btn" id="emptyStateAddBtn"><i class="fas fa-plus"></i> Add First Feedback</button>
+            </div>
+        `;
+        feedbackContainer.innerHTML = emptyState;
+        
+        // Add event listener for the empty state button
+        const emptyStateAddBtn = document.getElementById('emptyStateAddBtn');
+        if (emptyStateAddBtn) {
+            emptyStateAddBtn.addEventListener('click', function() {
+                newFeedbackForm.style.display = 'block';
+                document.getElementById('emptyState').style.display = 'none';
+                addFeedbackBtn.innerHTML = '<i class="fas fa-times"></i> Cancel';
+            });
+        }
+        return;
+    }
+    
+    feedbackItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `feedback-card priority-${item.priority}`;
+        card.dataset.id = item.id;
+        
+        // Status class mapping
+        const statusClass = {
+            'open': 'status-open',
+            'in-progress': 'status-in-progress',
+            'resolved': 'status-resolved'
+        };
+        
+        // Priority text mapping
+        const priorityText = {
+            'high': 'High Priority',
+            'medium': 'Medium Priority',
+            'low': 'Low Priority'
+        };
+        
+        // Format date
+        const formattedDate = new Date(item.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+        
+        card.innerHTML = `
+            <div class="priority-flag">
+                <i class="fas fa-flag"></i> ${priorityText[item.priority]}
+            </div>
+            <div class="feedback-meta">
+                <div class="feedback-date">${formattedDate}</div>
+                <div class="feedback-source">${item.source}</div>
+            </div>
+            <div class="feedback-description">
+                ${item.description}
+            </div>
+            <div class="feedback-status-row">
+                <div class="feedback-status ${statusClass[item.status]}">${item.status.replace('-', ' ')}</div>
+                <div class="assigned-to">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.assignedTo)}&background=random" alt="${item.assignedTo}">
+                    <span>${item.assignedTo}</span>
+                </div>
+            </div>
+            <div class="feedback-actions">
+                <button class="action-btn view-details-btn">
+                    <i class="fas fa-eye"></i> View
+                </button>
+                <button class="action-btn add-note-btn">
+                    <i class="fas fa-plus-circle"></i> Note
+                </button>
+            </div>
+        `;
+        
+        feedbackContainer.appendChild(card);
+    });
+    
+    // Add event listeners to action buttons
+    document.querySelectorAll('.view-details-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.feedback-card');
+            currentFeedbackId = parseInt(card.dataset.id);
+            showFeedbackDetails(currentFeedbackId);
+        });
+    });
+    
+    document.querySelectorAll('.add-note-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.feedback-card');
+            currentFeedbackId = parseInt(card.dataset.id);
+            addNoteModal.show();
+        });
+    });
+}
+
+// Show feedback details in modal
+function showFeedbackDetails(feedbackId) {
+    const feedback = feedbackData.find(item => item.id === feedbackId);
+    if (!feedback) return;
+    
+    const formattedDate = new Date(feedback.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    
+    let resolutionDateHtml = '';
+    if (feedback.resolutionDate) {
+        const formattedResolutionDate = new Date(feedback.resolutionDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+        resolutionDateHtml = `
+            <div class="resolution-date">
+                <strong>Resolved on:</strong> ${formattedResolutionDate}
+            </div>
+        `;
+    }
+    
+    let notesHtml = '';
+    if (feedback.notes.length > 0) {
+        notesHtml = `
+            <div class="notes-container">
+                <h6>Notes</h6>
+                ${feedback.notes.map(note => {
+                    const formattedNoteDate = new Date(note.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    return `
+                        <div class="note-item">
+                            <div class="note-header">
+                                <span>${formattedNoteDate}</span>
+                            </div>
+                            <div class="note-content">${note.content}</div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+    
+    let actionTakenHtml = '';
+    if (feedback.actionTaken) {
+        actionTakenHtml = `
+            <div class="action-taken">
+                <h6>Action Taken</h6>
+                <div class="action-content">${feedback.actionTaken}</div>
+            </div>
+        `;
+    }
+    
+    const priorityText = {
+        'high': 'High',
+        'medium': 'Medium',
+        'low': 'Low'
+    };
+    
+    const modalContent = `
+        <div class="row">
+            <div class="col-md-8">
+                <h5>${feedback.description}</h5>
+                <p class="text-muted">${feedback.source} • ${formattedDate}</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <span class="badge bg-${feedback.priority === 'high' ? 'danger' : feedback.priority === 'medium' ? 'warning' : 'success'}">
+                    ${priorityText[feedback.priority]} Priority
+                </span>
+                <span class="badge bg-${feedback.status === 'open' ? 'danger' : feedback.status === 'in-progress' ? 'warning' : 'success'}">
+                    ${feedback.status.replace('-', ' ')}
+                </span>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <strong>Assigned To:</strong>
+                    <div class="d-flex align-items-center mt-1">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(feedback.assignedTo)}&background=random" 
+                             alt="${feedback.assignedTo}" 
+                             class="rounded-circle me-2" 
+                             width="30" 
+                             height="30">
+                        <span>${feedback.assignedTo}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                ${resolutionDateHtml}
+            </div>
+        </div>
+        
+        ${actionTakenHtml}
+        ${notesHtml}
+    `;
+    
+    document.getElementById('feedbackDetailContent').innerHTML = modalContent;
+    feedbackDetailModal.show();
+}
+
+// Handle form submission for new feedback
+feedbackForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const newFeedback = {
+        id: feedbackData.length > 0 ? Math.max(...feedbackData.map(item => item.id)) + 1 : 1,
+        date: document.getElementById('feedbackDate').value,
+        source: document.getElementById('feedbackSource').value,
+        description: document.getElementById('feedbackDescription').value,
+        priority: document.getElementById('feedbackPriority').value,
+        status: 'open',
+        assignedTo: document.getElementById('assignedTo').value,
+        notes: [],
+        actionTaken: '',
+        resolutionDate: ''
+    };
+    
+    feedbackData.unshift(newFeedback);
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Feedback Added',
+        text: 'The feedback has been successfully added to the system.',
+        confirmButtonColor: '#3498db'
+    }).then(() => {
+        // Reset form and hide it
+        feedbackForm.reset();
+        document.getElementById('feedbackDate').value = new Date().toISOString().split('T')[0];
+        newFeedbackForm.style.display = 'none';
+        addFeedbackBtn.innerHTML = '<i class="fas fa-plus"></i> Add New Feedback';
+        
+        // Refresh the view
+        renderFeedbackCards(feedbackData);
+        updateStats();
+    });
+});
+
+// Toggle the new feedback form
+addFeedbackBtn.addEventListener('click', function() {
+    if (newFeedbackForm.style.display === 'none') {
+        newFeedbackForm.style.display = 'block';
+        this.innerHTML = '<i class="fas fa-times"></i> Cancel';
+    } else {
+        newFeedbackForm.style.display = 'none';
+        this.innerHTML = '<i class="fas fa-plus"></i> Add New Feedback';
+    }
+});
+
+// Save note to feedback
+function saveNote() {
+    const feedbackIndex = feedbackData.findIndex(item => item.id === currentFeedbackId);
+    
+    if (feedbackIndex === -1) return;
+    
+    const newNote = {
+        date: document.getElementById('noteDate').value,
+        content: document.getElementById('noteContent').value
+    };
+    
+    feedbackData[feedbackIndex].notes.push(newNote);
+    
+    // Reset note form
+    document.getElementById('noteContent').value = '';
+    document.getElementById('noteDate').value = new Date().toISOString().split('T')[0];
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Note Added',
+        text: 'The note has been successfully added to the feedback.',
+        confirmButtonColor: '#3498db'
+    }).then(() => {
+        addNoteModal.hide();
+        
+        // If detail modal was open, refresh its content
+        if (document.getElementById('feedbackDetailModal').classList.contains('show')) {
+            showFeedbackDetails(currentFeedbackId);
+        }
+    });
+}
+
+// Update statistics
+function updateStats() {
+    const total = feedbackData.length;
+    const open = feedbackData.filter(item => item.status === 'open').length;
+    const highPriority = feedbackData.filter(item => item.priority === 'high').length;
+    
+    // Calculate average resolution time (in days) for resolved items
+    const resolvedItems = feedbackData.filter(item => item.status === 'resolved' && item.resolutionDate);
+    let avgResolutionTime = 0;
+    
+    if (resolvedItems.length > 0) {
+        const totalDays = resolvedItems.reduce((sum, item) => {
+            const date1 = new Date(item.date);
+            const date2 = new Date(item.resolutionDate);
+            const diffTime = Math.abs(date2 - date1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return sum + diffDays;
+        }, 0);
+        
+        avgResolutionTime = (totalDays / resolvedItems.length).toFixed(1);
+    }
+    
+    // Update DOM elements
+    totalFeedbackEl.textContent = total;
+    openIssuesEl.textContent = open;
+    avgResolutionTimeEl.textContent = avgResolutionTime > 0 ? `${avgResolutionTime} days` : 'N/A';
+    highPriorityEl.textContent = highPriority;
+    
+    // These would normally come from API comparing with previous period
+    feedbackTrendEl.textContent = '12%';
+    openIssuesTrendEl.textContent = '3%';
+    resolutionTrendEl.textContent = avgResolutionTime > 0 ? '0.5 days' : 'N/A';
+    highPriorityTrendEl.textContent = '2';
+}
+
+// Function to filter feedback (placeholder for future implementation)
+function filterFeedback() {
+    renderFeedbackCards(feedbackData);
+}
+   </script>
+</body>
+</html>

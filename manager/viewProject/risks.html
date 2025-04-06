@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratAnalytica | Risk Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../../css/comman.css"/>
+    <link rel="stylesheet" href="../../css/risk.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-network"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="../view-projects.html"><i class="fas fa-arrow-left"></i> Back</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="project-info">
+                <h2 id="projectName">Project Name</h2>
+                <span class="project-status" id="projectStatus">Active</span>
+                
+                <div class="project-meta">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-user"></i>
+                    <span id="projectCreator">Created by: John Doe</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="../../manager/viewProject/project-dashboard.html" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../../manager/viewProject/risks.html" class="active"><i class="fas fa-exclamation-triangle"></i> Risks</a></li>
+                <li><a href="../../manager/viewProject/kpis.html" id="kpisLink"><i class="fas fa-bullseye"></i> KPIs</a></li>
+                <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
+                <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
+                <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
+                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+                <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="card risk-management">
+                <div class="container">
+                    <div class="header-actions">
+                        <h1><i class="fas fa-exclamation-triangle"></i> Risk Management</h1>
+                        <button class="add-risk-btn" id="addRiskBtn">
+                            <i class="fas fa-plus"></i> Add New Risk
+                        </button>
+                    </div>
+                    
+                    <div class="risk-summary">
+                        <div class="summary-card">
+                            <h3>Total Risks</h3>
+                            <div class="count" id="totalRisks">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Critical Risks</h3>
+                            <div class="count critical-count" id="criticalRisks">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>High Risks</h3>
+                            <div class="count high-count" id="highRisks">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Medium Risks</h3>
+                            <div class="count medium-count" id="mediumRisks">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Low Risks</h3>
+                            <div class="count low-count" id="lowRisks">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>Resolved</h3>
+                            <div class="count resolved-count" id="resolvedRisks">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="risk-table-container">
+                        <table id="riskTable" class="risk-table">
+                            <thead>
+                                <tr>
+                               
+                                    <th><i class="fas fa-align-left"></i> Description</th>
+                                    <th><i class="fas fa-chart-line"></i> Likelihood</th>
+                                    <th><i class="fas fa-bolt"></i> Impact</th>
+                                    <th><i class="fas fa-calculator"></i> Risk Level</th>
+                                    <th><i class="fas fa-flag"></i> Status</th>
+                                    <th><i class="fas fa-user"></i> Owner</th>
+                                    <th><i class="fas fa-calendar"></i> Created</th>
+                                    <th><i class="fas fa-sync-alt"></i> Updated</th>
+                                    <th><i class="fas fa-cog"></i> Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riskTableBody">
+                                <!-- Risks will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const riskTableBody = document.getElementById('riskTableBody');
+            const addRiskBtn = document.getElementById('addRiskBtn');
+            
+            // Sample data - in a real app, this would come from your database
+            let risks = [
+                {
+                    Risk_ID: 1,
+                    Project_ID: 1,
+                    Risk_Description: "Data security breach",
+                    Likelihood: 4,
+                    Impact: 5,
+                    Mitigation_Strategy: "Implement multi-factor authentication and regular security audits",
+                    Status: "Open",
+                    Created_At: "2023-05-15T10:30:00",
+                    Updated_At: "2023-05-20T14:45:00",
+                    Owner: "Security Team"
+                },
+                {
+                    Risk_ID: 2,
+                    Project_ID: 1,
+                    Risk_Description: "Key team member leaving",
+                    Likelihood: 3,
+                    Impact: 4,
+                    Mitigation_Strategy: "Cross-train team members and document processes",
+                    Status: "In Progress",
+                    Created_At: "2023-05-10T09:15:00",
+                    Updated_At: "2023-05-18T11:20:00",
+                    Owner: "HR Department"
+                },
+                {
+                    Risk_ID: 3,
+                    Project_ID: 1,
+                    Risk_Description: "Vendor delivery delays",
+                    Likelihood: 2,
+                    Impact: 3,
+                    Mitigation_Strategy: "Identify alternative suppliers and build buffer time into schedule",
+                    Status: "Open",
+                    Created_At: "2023-05-05T13:00:00",
+                    Updated_At: "2023-05-05T13:00:00",
+                    Owner: "Procurement Team"
+                }
+            ];
+            
+            // Initialize the page
+            init();
+            
+            function init() {
+                // Set up event listeners
+                addRiskBtn.addEventListener('click', showAddRiskPopup);
+                
+                // Load initial data
+                updateRiskTable();
+            }
+            
+            // Show SweetAlert popup for adding new risk
+            function showAddRiskPopup() {
+                Swal.fire({
+                    title: '<i class="fas fa-plus-circle"></i> Add New Risk',
+                    html: `
+                        <form id="riskForm">
+                            <input type="hidden" id="projectId" value="1">
+                            
+                            <div class="form-group">
+                                <label for="swal-description">Description:</label>
+                                <textarea id="swal-description" class="swal2-textarea" placeholder="Describe the risk in detail" required></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="swal-likelihood">Likelihood:</label>
+                                    <select id="swal-likelihood" class="swal2-select" required>
+                                        <option value="">Select likelihood</option>
+                                        <option value="1">1 - Very Low</option>
+                                        <option value="2">2 - Low</option>
+                                        <option value="3">3 - Moderate</option>
+                                        <option value="4">4 - High</option>
+                                        <option value="5">5 - Very High</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="swal-impact">Impact:</label>
+                                    <select id="swal-impact" class="swal2-select" required>
+                                        <option value="">Select impact</option>
+                                        <option value="1">1 - Negligible</option>
+                                        <option value="2">2 - Minor</option>
+                                        <option value="3">3 - Moderate</option>
+                                        <option value="4">4 - Major</option>
+                                        <option value="5">5 - Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="swal-mitigation">Mitigation Strategy:</label>
+                                <textarea id="swal-mitigation" class="swal2-textarea" placeholder="Describe how to mitigate this risk" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="swal-owner">Risk Owner:</label>
+                                <input type="text" id="swal-owner" class="swal2-input" placeholder="Person responsible" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="swal-status">Status:</label>
+                                <select id="swal-status" class="swal2-select" required>
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                        </form>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Save Risk',
+                    cancelButtonText: 'Cancel',
+                    preConfirm: () => {
+                        const description = document.getElementById('swal-description').value;
+                        const likelihood = document.getElementById('swal-likelihood').value;
+                        const impact = document.getElementById('swal-impact').value;
+                        const mitigation = document.getElementById('swal-mitigation').value;
+                        const owner = document.getElementById('swal-owner').value;
+                        const status = document.getElementById('swal-status').value;
+                        
+                        if (!description || !likelihood || !impact || !mitigation || !owner || !status) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
+                        }
+                        
+                        return {
+                            description,
+                            likelihood: parseInt(likelihood),
+                            impact: parseInt(impact),
+                            mitigation,
+                            owner,
+                            status
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        addNewRisk(result.value);
+                    }
+                });
+            }
+            
+            // Add new risk to the system
+            function addNewRisk(riskData) {
+                const now = new Date().toISOString();
+                
+                const newRisk = {
+                    Risk_ID: risks.length > 0 ? Math.max(...risks.map(r => r.Risk_ID)) + 1 : 1,
+                    Project_ID: 1, // Would come from your actual project context
+                    Risk_Description: riskData.description,
+                    Likelihood: riskData.likelihood,
+                    Impact: riskData.impact,
+                    Mitigation_Strategy: riskData.mitigation,
+                    Status: riskData.status,
+                    Owner: riskData.owner,
+                    Created_At: now,
+                    Updated_At: now
+                };
+                
+                risks.push(newRisk);
+                updateRiskTable();
+                showSuccessAlert('Risk added successfully!');
+            }
+            
+            // Update Risk Table
+            function updateRiskTable() {
+                riskTableBody.innerHTML = '';
+                
+                // Calculate risk levels and counts
+                const total = risks.length;
+                const critical = risks.filter(r => getRiskLevel(r.Likelihood, r.Impact) === 'Critical').length;
+                const high = risks.filter(r => getRiskLevel(r.Likelihood, r.Impact) === 'High').length;
+                const medium = risks.filter(r => getRiskLevel(r.Likelihood, r.Impact) === 'Medium').length;
+                const low = risks.filter(r => getRiskLevel(r.Likelihood, r.Impact) === 'Low').length;
+                const resolved = risks.filter(r => r.Status === 'Resolved' || r.Status === 'Closed').length;
+                
+                // Update summary cards
+                document.getElementById('totalRisks').textContent = total;
+                document.getElementById('criticalRisks').textContent = critical;
+                document.getElementById('highRisks').textContent = high;
+                document.getElementById('mediumRisks').textContent = medium;
+                document.getElementById('lowRisks').textContent = low;
+                document.getElementById('resolvedRisks').textContent = resolved;
+                
+                // Populate table
+                risks.forEach(risk => {
+                    const riskLevel = getRiskLevel(risk.Likelihood, risk.Impact);
+                    const createdDate = formatDate(risk.Created_At);
+                    const updatedDate = formatDate(risk.Updated_At);
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+            
+                        <td>${risk.Risk_Description}</td>
+                        <td>${risk.Likelihood}</td>
+                        <td>${risk.Impact}</td>
+                        <td><span class="status-badge ${riskLevel.toLowerCase()}">${riskLevel}</span></td>
+                        <td>${risk.Status}</td>
+                        <td>${risk.Owner}</td>
+                        <td>${createdDate}</td>
+                        <td>${updatedDate}</td>
+                        <td class="actions">
+                            <button class="action-btn edit-btn" data-id="${risk.Risk_ID}">
+                                <i class="fas fa-edit"></i> 
+                            </button>
+                            <button class="action-btn resolve-btn" data-id="${risk.Risk_ID}">
+                                <i class="fas fa-check-circle"></i> 
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${risk.Risk_ID}">
+                                <i class="fas fa-trash-alt"></i> 
+                            </button>
+                        </td>
+                    `;
+                    riskTableBody.appendChild(row);
+                });
+                
+                // Add event listeners to action buttons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        editRisk(id);
+                    });
+                });
+                
+                document.querySelectorAll('.resolve-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        resolveRisk(id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        deleteRisk(id);
+                    });
+                });
+            }
+            
+            // Edit existing risk
+            function editRisk(id) {
+                const risk = risks.find(r => r.Risk_ID === id);
+                if (!risk) return;
+                
+                Swal.fire({
+                    title: '<i class="fas fa-edit"></i> Edit Risk',
+                    html: `
+                        <form id="editRiskForm">
+                            <input type="hidden" id="edit-risk-id" value="${risk.Risk_ID}">
+                            
+                            <div class="form-group">
+                                <label for="edit-description">Description:</label>
+                                <textarea id="edit-description" class="swal2-textarea" required>${risk.Risk_Description}</textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="edit-likelihood">Likelihood:</label>
+                                    <select id="edit-likelihood" class="swal2-select" required>
+                                        <option value="1" ${risk.Likelihood === 1 ? 'selected' : ''}>1 - Very Low</option>
+                                        <option value="2" ${risk.Likelihood === 2 ? 'selected' : ''}>2 - Low</option>
+                                        <option value="3" ${risk.Likelihood === 3 ? 'selected' : ''}>3 - Moderate</option>
+                                        <option value="4" ${risk.Likelihood === 4 ? 'selected' : ''}>4 - High</option>
+                                        <option value="5" ${risk.Likelihood === 5 ? 'selected' : ''}>5 - Very High</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-impact">Impact:</label>
+                                    <select id="edit-impact" class="swal2-select" required>
+                                        <option value="1" ${risk.Impact === 1 ? 'selected' : ''}>1 - Negligible</option>
+                                        <option value="2" ${risk.Impact === 2 ? 'selected' : ''}>2 - Minor</option>
+                                        <option value="3" ${risk.Impact === 3 ? 'selected' : ''}>3 - Moderate</option>
+                                        <option value="4" ${risk.Impact === 4 ? 'selected' : ''}>4 - Major</option>
+                                        <option value="5" ${risk.Impact === 5 ? 'selected' : ''}>5 - Severe</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edit-mitigation">Mitigation Strategy:</label>
+                                <textarea id="edit-mitigation" class="swal2-textarea" required>${risk.Mitigation_Strategy}</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edit-owner">Risk Owner:</label>
+                                <input type="text" id="edit-owner" class="swal2-input" value="${risk.Owner}" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edit-status">Status:</label>
+                                <select id="edit-status" class="swal2-select" required>
+                                    <option value="Open" ${risk.Status === 'Open' ? 'selected' : ''}>Open</option>
+                                    <option value="In Progress" ${risk.Status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                    <option value="Resolved" ${risk.Status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                                    <option value="Closed" ${risk.Status === 'Closed' ? 'selected' : ''}>Closed</option>
+                                </select>
+                            </div>
+                        </form>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update Risk',
+                    cancelButtonText: 'Cancel',
+                    preConfirm: () => {
+                        const description = document.getElementById('edit-description').value;
+                        const likelihood = document.getElementById('edit-likelihood').value;
+                        const impact = document.getElementById('edit-impact').value;
+                        const mitigation = document.getElementById('edit-mitigation').value;
+                        const owner = document.getElementById('edit-owner').value;
+                        const status = document.getElementById('edit-status').value;
+                        
+                        if (!description || !likelihood || !impact || !mitigation || !owner || !status) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
+                        }
+                        
+                        return {
+                            id: parseInt(document.getElementById('edit-risk-id').value),
+                            description,
+                            likelihood: parseInt(likelihood),
+                            impact: parseInt(impact),
+                            mitigation,
+                            owner,
+                            status
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateRisk(result.value);
+                    }
+                });
+            }
+            
+            // Update existing risk
+            function updateRisk(riskData) {
+                const index = risks.findIndex(r => r.Risk_ID === riskData.id);
+                if (index === -1) return;
+                
+                risks[index] = {
+                    ...risks[index],
+                    Risk_Description: riskData.description,
+                    Likelihood: riskData.likelihood,
+                    Impact: riskData.impact,
+                    Mitigation_Strategy: riskData.mitigation,
+                    Status: riskData.status,
+                    Owner: riskData.owner,
+                    Updated_At: new Date().toISOString()
+                };
+                
+                updateRiskTable();
+                showSuccessAlert('Risk updated successfully!');
+            }
+            
+            // Resolve Risk
+            function resolveRisk(id) {
+                const risk = risks.find(r => r.Risk_ID === id);
+                if (risk) {
+                    risk.Status = 'Resolved';
+                    risk.Updated_At = new Date().toISOString();
+                    updateRiskTable();
+                    showSuccessAlert('Risk marked as resolved!');
+                }
+            }
+            
+            // Delete Risk
+            function deleteRisk(id) {
+                Swal.fire({
+                    title: 'Delete Risk?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        risks = risks.filter(r => r.Risk_ID !== id);
+                        updateRiskTable();
+                        showSuccessAlert('Risk deleted successfully!');
+                    }
+                });
+            }
+            
+            // Determine risk level
+            function getRiskLevel(likelihood, impact) {
+                const riskScore = likelihood * impact;
+                if (riskScore >= 20) return 'Critical';
+                if (riskScore >= 15) return 'High';
+                if (riskScore >= 8) return 'Medium';
+                return 'Low';
+            }
+            
+            // Format date for display
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
+            
+            // Show success alert
+            function showSuccessAlert(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: message,
+                    confirmButtonText: 'OK',
+                    timer: 2000
+                });
+            }
+        });
+    </script>
+</body>
+</html>
