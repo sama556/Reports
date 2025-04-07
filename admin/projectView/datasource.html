@@ -28,16 +28,20 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">project name</h2>
-                <span class="status-badge status-active" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
                 </div>
             </div>
             <ul class="sidebar-menu">
@@ -66,371 +70,418 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        const dataSources = [
-            {
-                id: 1,
-                name: "Customer Database",
-                type: "database",
-                status: "active",
-                lastUpdated: "2023-07-15T14:30:00Z",
-                createdBy: "John Doe",
-                records: 12548,
-                connection: "mysql://prod_db:3306/customers"
-            },
-            {
-                id: 2,
-                name: "Sales API",
-                type: "api",
-                status: "active",
-                lastUpdated: "2023-07-18T09:15:00Z",
-                createdBy: "Jane Smith",
-                records: 8742,
-                connection: "https://api.sales-system.com/v3"
-            },
-            {
-                id: 3,
-                name: "Product Inventory",
-                type: "file",
-                status: "inactive",
-                lastUpdated: "2023-07-10T16:45:00Z",
-                createdBy: "Mike Johnson",
-                records: 1245,
-                connection: "/data/uploads/inventory_20230701.csv"
-            },
-            {
-                id: 4,
-                name: "Google Analytics",
-                type: "external",
-                status: "active",
-                lastUpdated: "2023-07-19T11:20:00Z",
-                createdBy: "Sarah Williams",
-                records: 24891,
-                connection: "oauth2::analytics::UA-1234567"
-            },
-            {
-                id: 5,
-                name: "Legacy CRM",
-                type: "database",
-                status: "error",
-                lastUpdated: "2023-06-28T13:10:00Z",
-                createdBy: "Robert Chen",
-                records: 0,
-                connection: "oracle://legacy_crm:1521/CRMDB"
-            }
-        ];
+   <script>
+    // First, let's fix the dataSources array to use consistent property naming
+const dataSources = [
+    {
+        Source_ID: 1,
+        Source_Name: "Customer Database",
+        Source_Type: "database",
+        Status: "active",
+        Last_Updated: "2023-07-15T14:30:00Z",
+        Created_By: "John Doe",
+        Connection_String: "mysql://prod_db:3306/customers"
+    },
+    {
+        Source_ID: 2,
+        Source_Name: "Sales API",
+        Source_Type: "api",
+        Status: "active",
+        Last_Updated: "2023-07-18T09:15:00Z",
+        Created_By: "Jane Smith",
+        Connection_String: "https://api.sales-system.com/v3"
+    },
+    {
+        Source_ID: 3,
+        Source_Name: "Product Inventory",
+        Source_Type: "file",
+        Status: "inactive",
+        Last_Updated: "2023-07-10T16:45:00Z",
+        Created_By: "Mike Johnson",
+        Connection_String: "/data/uploads/inventory_20230701.csv"
+    },
+    {
+        Source_ID: 4,
+        Source_Name: "Google Analytics",
+        Source_Type: "external",
+        Status: "active",
+        Last_Updated: "2023-07-19T11:20:00Z",
+        Created_By: "Sarah Williams",
+        Connection_String: "oauth2::analytics::UA-1234567"
+    },
+    {
+        Source_ID: 5,
+        Source_Name: "Legacy CRM",
+        Source_Type: "database",
+        Status: "error",
+        Last_Updated: "2023-06-28T13:10:00Z",
+        Created_By: "Robert Chen",
+        Connection_String: "oracle://legacy_crm:1521/CRMDB"
+    }
+];
 
-        // DOM Elements
-        const dataSourcesContainer = document.getElementById('dataSourcesContainer');
-        const addDataSourceBtn = document.getElementById('addDataSourceBtn');
-        const applyFiltersBtn = document.getElementById('applyFilters');
-        const resetFiltersBtn = document.getElementById('resetFilters');
-        const sourceTypeFilter = document.getElementById('sourceTypeFilter');
-        const sourceStatusFilter = document.getElementById('sourceStatusFilter');
-        const searchSources = document.getElementById('searchSources');
+// DOM Elements
+const dataSourcesContainer = document.getElementById('dataSourcesContainer');
+const addDataSourceBtn = document.getElementById('addDataSourceBtn');
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            renderDataSources(dataSources);
-            setupEventListeners();
-        });
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    renderDataSources(dataSources);
+    setupEventListeners();
+});
 
-        // Render data sources to the page
-        function renderDataSources(sources) {
-            dataSourcesContainer.innerHTML = '';
-            
-            if (sources.length === 0) {
-                dataSourcesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-database"></i>
-                        <h3>No Data Sources Found</h3>
-                        <p>Try adjusting your filters or add a new data source</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            sources.forEach(source => {
-                const sourceCard = document.createElement('div');
-                sourceCard.className = 'data-source-card';
-                sourceCard.innerHTML = createSourceCardHTML(source);
-                dataSourcesContainer.appendChild(sourceCard);
-            });
-        }
-
-        // Create HTML for a single source card
-        function createSourceCardHTML(source) {
-            const icon = getSourceIcon(source.type);
-            const statusClass = `status-${source.status}`;
-            const formattedDate = formatDate(source.lastUpdated);
-            
-            return `
-                <div class="data-source-header">
-                    <div class="source-icon">
-                        <i class="fas ${icon}"></i>
-                    </div>
-                    <div class="source-info">
-                        <h3 class="source-name">${source.name}</h3>
-                        <span class="source-type">${capitalizeFirstLetter(source.type)}</span>
-                    </div>
-                    <span class="status-badge ${statusClass}">${capitalizeFirstLetter(source.status)}</span>
-                </div>
-                
-                <div class="source-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Updated: ${formattedDate}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-user"></i>
-                        <span>Created by: ${source.createdBy}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-table"></i>
-                        <span>Records: ${source.records.toLocaleString()}</span>
-                    </div>
-                </div>
-                
-                <div class="source-actions">
-                    <button class="btn-primary btn-sm" onclick="viewSourceDetails(${source.id})">
-                        <i class="fas fa-eye"></i> View
-                    </button>
-                    <button class="btn-secondary btn-sm" onclick="testSourceConnection(${source.id})">
-                        <i class="fas fa-bolt"></i> Test
-                    </button>
-                </div>
-            `;
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            addDataSourceBtn.addEventListener('click', showAddSourceDialog);
+// Create HTML for a single source card
+function createSourceCardHTML(source) {
+    const icon = getSourceIcon(source.Source_Type);
+    const statusClass = `status-${source.Status}`;
+    const formattedDate = formatDate(source.Last_Updated);
+    
+    return `
+        <div class="data-source-header">
+            <div class="source-icon">
+                <i class="fas ${icon}"></i>
+            </div>
+            <div class="source-info">
+                <h3 class="source-name">${source.Source_Name}</h3>
+                <span class="source-type">${capitalizeFirstLetter(source.Source_Type)}</span>
+            </div>
+            <span class="status-badge ${statusClass}">${capitalizeFirstLetter(source.Status)}</span>
+        </div>
         
-        }
+        <div class="source-meta">
+            <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Updated: ${formattedDate}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-user"></i>
+                <span>Created by: ${source.Created_By}</span>
+            </div>
+        </div>
+        
+        <div class="source-actions">
+            <button class="btn-primary btn-sm view-btn" data-id="${source.Source_ID}">
+                <i class="fas fa-eye"></i> View
+            </button>
+        </div>
+    `;
+}
 
-        // Source actions
-        function viewSourceDetails(sourceId) {
-            const source = dataSources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            const formattedDate = formatDate(source.lastUpdated);
-            const statusClass = `status-${source.status}`;
-            
-            Swal.fire({
-                title: source.name,
-                html: `
-                    <div style="text-align: left;">
-                        <div style="margin-bottom: 12px;">
-                            <strong>Type:</strong> ${capitalizeFirstLetter(source.type)}
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Status:</strong> <span class="${statusClass}" style="padding: 2px 8px; border-radius: 12px; font-size: 0.85rem;">
-                                ${capitalizeFirstLetter(source.status)}
-                            </span>
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Last Updated:</strong> ${formattedDate}
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Created by:</strong> ${source.createdBy}
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Records:</strong> ${source.records.toLocaleString()}
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Connection:</strong>
-                            <div style="background: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 5px; font-family: monospace; word-break: break-all; font-size: 0.85rem;">
-                                ${source.connection}
-                            </div>
-                        </div>
+// Render data sources to the page
+function renderDataSources(sources) {
+    dataSourcesContainer.innerHTML = '';
+    
+    if (sources.length === 0) {
+        dataSourcesContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-database"></i>
+                <h3>No Data Sources Found</h3>
+                <p>Try adjusting your filters or add a new data source</p>
+            </div>
+        `;
+        return;
+    }
+    
+    sources.forEach(source => {
+        const sourceCard = document.createElement('div');
+        sourceCard.className = 'data-source-card';
+        sourceCard.innerHTML = createSourceCardHTML(source);
+        dataSourcesContainer.appendChild(sourceCard);
+    });
+    
+    // Add event listeners to view buttons
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const button = e.target.closest('.view-btn');
+            if (button) {
+                const sourceId = parseInt(button.getAttribute('data-id'));
+                viewSourceDetails(sourceId);
+            }
+        });
+    });
+}
+
+// Set up event listeners
+function setupEventListeners() {
+    addDataSourceBtn.addEventListener('click', showAddSourceDialog);
+}
+
+// Source actions
+function viewSourceDetails(sourceId) {
+    const source = dataSources.find(s => s.Source_ID === sourceId);
+    if (!source) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Data source not found!',
+            icon: 'error'
+        });
+        return;
+    }
+    
+    const formattedDate = formatDate(source.Last_Updated);
+    const statusClass = `status-${source.Status}`;
+    
+    Swal.fire({
+        title: source.Source_Name,
+        html: `
+            <div style="text-align: left;">
+                <div style="margin-bottom: 12px;">
+                    <strong>Type:</strong> ${capitalizeFirstLetter(source.Source_Type)}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Status:</strong> <span class="${statusClass}" style="padding: 2px 8px; border-radius: 12px; font-size: 0.85rem;">
+                        ${capitalizeFirstLetter(source.Status)}
+                    </span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Last Updated:</strong> ${formattedDate}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Created by:</strong> ${source.Created_By}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Connection String:</strong>
+                    <div style="background: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 5px; font-family: monospace; word-break: break-all; font-size: 0.85rem;">
+                        ${source.Connection_String}
                     </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Edit',
-                cancelButtonText: 'Close',
-                showDenyButton: true,
-                denyButtonText: 'Delete',
-                denyButtonColor: '#e74c3c',
-                focusConfirm: false,
-                width: '600px'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    editSource(sourceId);
-                } else if (result.isDenied) {
-                    deleteSource(sourceId);
-                }
-            });
+                </div>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Edit',
+        cancelButtonText: 'Close',
+        showDenyButton: true,
+        denyButtonText: 'Delete',
+        denyButtonColor: '#e74c3c',
+        focusConfirm: false,
+        width: '600px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            editSource(sourceId);
+        } else if (result.isDenied) {
+            deleteSource(sourceId);
         }
+    });
+}
 
-        function testSourceConnection(sourceId) {
-            const source = dataSources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            Swal.fire({
-                title: 'Testing Connection',
-                html: `Connecting to <strong>${source.name}</strong>...`,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                    
-                    // Simulate API call
-                    setTimeout(() => {
-                        const success = Math.random() > 0.3; 
-                        
-                        if (success) {
-                            Swal.fire({
-                                title: 'Success',
-                                text: `Connection to ${source.name} established successfully`,
-                                icon: 'success'
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Connection Failed',
-                                text: `Could not connect to ${source.name}. Please check your connection settings.`,
-                                icon: 'error'
-                            });
-                        }
-                    }, 1500);
-                }
-            });
-        }
-
-        function editSource(sourceId) {
-            const source = dataSources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            Swal.fire({
-                title: 'Edit Data Source',
-                html: `
-                    <div style="text-align: left;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Name</label>
-                            <input id="editSourceName" class="swal2-input" value="${source.name}">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type</label>
-                            <select id="editSourceType" class="swal2-select">
-                                <option value="database" ${source.type === 'database' ? 'selected' : ''}>Database</option>
-                                <option value="api" ${source.type === 'api' ? 'selected' : ''}>API</option>
-                                <option value="file" ${source.type === 'file' ? 'selected' : ''}>File</option>
-                                <option value="external" ${source.type === 'external' ? 'selected' : ''}>External</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Connection String</label>
-                            <textarea id="editConnectionString" class="swal2-textarea" style="height: 80px;">${source.connection}</textarea>
-                        </div>
-                    </div>
-                `,
-                focusConfirm: false,
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('editSourceName').value,
-                        type: document.getElementById('editSourceType').value,
-                        connection: document.getElementById('editConnectionString').value
-                    };
-                },
-                width: '600px'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Updated',
-                        text: `Data source "${result.value.name}" has been updated`,
-                        icon: 'success'
-                    });
-                
-                }
-            });
-        }
-
-        function deleteSource(sourceId) {
-            const source = dataSources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            Swal.fire({
-                title: 'Delete Data Source?',
-                text: `Are you sure you want to delete "${source.name}"? This cannot be undone.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#e74c3c'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: `Data source "${source.name}" has been deleted.`,
-                        icon: 'success'
-                    });
-                    // In real app, would delete via API here
-                }
-            });
-        }
-
-        function showAddSourceDialog() {
-            Swal.fire({
-                title: 'Add New Data Source',
-                html: `
-                    <div style="text-align: left;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Name</label>
-                            <input id="newSourceName" class="swal2-input" placeholder="e.g. Customer Database">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type</label>
-                            <select id="newSourceType" class="swal2-select">
-                                <option value="database">Database</option>
-                                <option value="api">API</option>
-                                <option value="file">File</option>
-                                <option value="external">External</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Connection String</label>
-                            <textarea id="newConnectionString" class="swal2-textarea" style="height: 80px;" placeholder="Enter connection details..."></textarea>
-                        </div>
-                    </div>
-                `,
-                focusConfirm: false,
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('newSourceName').value,
-                        type: document.getElementById('newSourceType').value,
-                        connection: document.getElementById('newConnectionString').value
-                    };
-                },
-                width: '600px'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: `Data source "${result.value.name}" has been added.`,
-                        icon: 'success'
-                    });
-                    
-                }
-            });
-        }
-
-        // Helper functions
-        function getSourceIcon(type) {
-            switch(type) {
-                case 'database': return 'fa-database';
-                case 'api': return 'fa-plug';
-                case 'file': return 'fa-file-alt';
-                case 'external': return 'fa-cloud';
-                default: return 'fa-database';
+function editSource(sourceId) {
+    const source = dataSources.find(s => s.Source_ID === sourceId);
+    if (!source) return;
+    
+    Swal.fire({
+        title: 'Edit Data Source',
+        html: `
+            <div style="text-align: left;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Name</label>
+                    <input id="editSourceName" class="swal2-input" value="${source.Source_Name}">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type</label>
+                    <select id="editSourceType" class="swal2-select">
+                        <option value="database" ${source.Source_Type === 'database' ? 'selected' : ''}>Database</option>
+                        <option value="api" ${source.Source_Type === 'api' ? 'selected' : ''}>API</option>
+                        <option value="file" ${source.Source_Type === 'file' ? 'selected' : ''}>File</option>
+                        <option value="external" ${source.Source_Type === 'external' ? 'selected' : ''}>External</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Status</label>
+                    <select id="editSourceStatus" class="swal2-select">
+                        <option value="active" ${source.Status === 'active' ? 'selected' : ''}>Active</option>
+                        <option value="inactive" ${source.Status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                        <option value="error" ${source.Status === 'error' ? 'selected' : ''}>Error</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Connection String</label>
+                    <textarea id="editConnectionString" class="swal2-textarea" style="height: 80px;">${source.Connection_String}</textarea>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        preConfirm: () => {
+            return {
+                Source_Name: document.getElementById('editSourceName').value,
+                Source_Type: document.getElementById('editSourceType').value,
+                Status: document.getElementById('editSourceStatus').value,
+                Connection_String: document.getElementById('editConnectionString').value
+            };
+        },
+        width: '600px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Update the source in the array
+            const index = dataSources.findIndex(s => s.Source_ID === sourceId);
+            if (index !== -1) {
+                dataSources[index] = {
+                    ...dataSources[index],
+                    Source_Name: result.value.Source_Name,
+                    Source_Type: result.value.Source_Type,
+                    Status: result.value.Status,
+                    Connection_String: result.value.Connection_String,
+                    Last_Updated: new Date().toISOString()
+                };
+                renderDataSources(dataSources);
+                Swal.fire({
+                    title: 'Updated',
+                    text: `Data source "${result.value.Source_Name}" has been updated`,
+                    icon: 'success'
+                });
             }
         }
+    });
+}
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+function deleteSource(sourceId) {
+    const source = dataSources.find(s => s.Source_ID === sourceId);
+    if (!source) return;
+    
+    Swal.fire({
+        title: 'Delete Data Source?',
+        text: `Are you sure you want to delete "${source.Source_Name}"? This cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#e74c3c'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Remove the source from the array
+            const updatedSources = dataSources.filter(s => s.Source_ID !== sourceId);
+            dataSources.length = 0;
+            dataSources.push(...updatedSources);
+            
+            renderDataSources(dataSources);
+            
+            Swal.fire({
+                title: 'Deleted!',
+                text: `Data source "${source.Source_Name}" has been deleted.`,
+                icon: 'success'
+            });
         }
+    });
+}
 
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
+function showAddSourceDialog() {
+    Swal.fire({
+        title: 'Add New Data Source',
+        html: `
+            <div style="text-align: left;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Name *</label>
+                    <input id="newSourceName" class="swal2-input" placeholder="e.g. Customer Database" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type *</label>
+                    <select id="newSourceType" class="swal2-select" required>
+                        <option value="database">Database</option>
+                        <option value="api">API</option>
+                        <option value="file">File</option>
+                        <option value="external">External</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Connection String *</label>
+                    <textarea id="newConnectionString" class="swal2-textarea" style="height: 80px;" placeholder="Enter connection details..." required></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Status *</label>
+                    <select id="newSourceStatus" class="swal2-select" required>
+                        <option value="active" selected>Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="error">Error</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Created By *</label>
+                    <input id="newSourceCreator" class="swal2-input" value="Current User" required>
+                    <small style="color: #666; display: block; margin-top: 3px;">In a real app, this would automatically use the current logged-in user</small>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Add Source',
+        cancelButtonText: 'Cancel',
+        preConfirm: () => {
+            const name = document.getElementById('newSourceName').value.trim();
+            const type = document.getElementById('newSourceType').value;
+            const connection = document.getElementById('newConnectionString').value.trim();
+            const status = document.getElementById('newSourceStatus').value;
+            const creator = document.getElementById('newSourceCreator').value.trim();
+            
+            // Validation
+            if (!name) {
+                Swal.showValidationMessage('Source name is required');
+                return false;
+            }
+            
+            if (!connection) {
+                Swal.showValidationMessage('Connection string is required');
+                return false;
+            }
+            
+            if (!creator) {
+                Swal.showValidationMessage('Creator name is required');
+                return false;
+            }
+            
+            return {
+                Source_Name: name,
+                Source_Type: type,
+                Connection_String: connection,
+                Status: status,
+                Created_By: creator
+            };
+        },
+        width: '600px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Create new source and add to array
+            const newSourceId = dataSources.length > 0 ? 
+                Math.max(...dataSources.map(s => s.Source_ID)) + 1 : 1;
+                
+            const newSource = {
+                Source_ID: newSourceId,
+                Source_Name: result.value.Source_Name,
+                Source_Type: result.value.Source_Type,
+                Status: result.value.Status,
+                Last_Updated: new Date().toISOString(),
+                Created_By: result.value.Created_By,
+                Connection_String: result.value.Connection_String
+            };
+            
+            dataSources.unshift(newSource);
+            renderDataSources(dataSources);
+            
+            Swal.fire({
+                title: 'Success!',
+                text: `Data source "${result.value.Source_Name}" has been added.`,
+                icon: 'success'
+            });
         }
-    </script>
+    });
+}
+// Helper functions
+function getSourceIcon(type) {
+    switch(type) {
+        case 'database': return 'fa-database';
+        case 'api': return 'fa-plug';
+        case 'file': return 'fa-file-alt';
+        case 'external': return 'fa-cloud';
+        default: return 'fa-database';
+    }
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+   </script>
 </body>
 </html>

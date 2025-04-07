@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/user-mangment.css"/>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="container header-container">
             <a href="#" class="logo">
                 <i class="fas fa-chart-network"></i>
@@ -29,13 +29,11 @@
         <!-- Admin Sidebar -->
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><span class="role-badge role-admin">Admin</span></li>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="user-mangement.html" class="active"><i class="fas fa-users"></i> User Management</a></li>
-                <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> Project management</a></li>
-                <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> view projects</a
-            
-              
+                <li><span class="badge badge-admin">Admin</span></li>
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="user-mangement.html" class="active"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> <span>Project management</span></a></li>
+                <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> <span>View projects</span></a></li>
             </ul>
         </aside>
 
@@ -48,161 +46,165 @@
                     </button>
                 </div>
                 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Created</th>
-                            <th>Last Login</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avatar" style="background-color: #4361ee;">JD</div>
-                                    <div>johndoe</div>
-                                </div>
-                            </td>
-                            <td>john.doe@example.com</td>
-                            <td><span class="badge badge-manager">Manager</span></td>
-                            <td class="timestamp">2023-01-15 09:30</td>
-                            <td class="timestamp">2023-06-15 14:20</td>
-                            <td><span class="status status-active">Active</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="1001">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-info view-btn" data-id="1001">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="1001">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                           
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avatar" style="background-color: #4895ef;">JS</div>
-                                    <div>janesmith</div>
-                                </div>
-                            </td>
-                            <td>jane.smith@example.com</td>
-                            <td><span class="badge badge-manager">Manager</span></td>
-                            <td class="timestamp">2023-02-20 11:15</td>
-                            <td class="timestamp">2023-06-14 10:45</td>
-                            <td><span class="status status-active">Active</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="1002">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-info view-btn" data-id="1002">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="1002">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                           
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avatar" style="background-color: #4cc9f0;">MJ</div>
-                                    <div>mikej</div>
-                                </div>
-                            </td>
-                            <td>mike.johnson@example.com</td>
-                            <td><span class="badge badge-analyst">Analyst</span></td>
-                            <td class="timestamp">2023-03-10 14:00</td>
-                            <td class="timestamp">2023-06-10 08:30</td>
-                            <td><span class="status status-pending">Pending</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="1003">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-info view-btn" data-id="1003">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="1003">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                           
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avatar" style="background-color: #f8961e;">SW</div>
-                                    <div>sarahw</div>
-                                </div>
-                            </td>
-                            <td>sarah.williams@example.com</td>
-                            <td><span class="badge badge-analyst">Analyst</span></td>
-                            <td class="timestamp">2023-04-05 16:20</td>
-                            <td class="timestamp">2023-05-28 13:15</td>
-                            <td><span class="status status-inactive">Inactive</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="1004">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-info view-btn" data-id="1004">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="1004">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                          
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avatar" style="background-color: #f72585;">DB</div>
-                                    <div>davidb</div>
-                                </div>
-                            </td>
-                            <td>david.brown@example.com</td>
-                            <td><span class="badge badge-manager">Manager</span></td>
-                            <td class="timestamp">2023-05-18 10:45</td>
-                            <td class="timestamp">2023-06-01 09:00</td>
-                            <td><span class="status status-suspended">Suspended</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="1005">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-info view-btn" data-id="1005">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="1005">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Last Login</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="avatar" style="background-color: #4361ee;">JD</div>
+                                        <div>johndoe</div>
+                                    </div>
+                                </td>
+                                <td>john.doe@example.com</td>
+                                <td><span class="badge badge-manager">Manager</span></td>
+                                <td>2023-01-15 09:30</td>
+                                <td>2023-06-15 14:20</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success edit-btn" data-id="1001">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-info view-btn" data-id="1001">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="1001">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="avatar" style="background-color: #4895ef;">JS</div>
+                                        <div>janesmith</div>
+                                    </div>
+                                </td>
+                                <td>jane.smith@example.com</td>
+                                <td><span class="badge badge-manager">Manager</span></td>
+                                <td>2023-02-20 11:15</td>
+                                <td>2023-06-14 10:45</td>
+                                <td><span class="status status-active">Active</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success edit-btn" data-id="1002">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-info view-btn" data-id="1002">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="1002">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="avatar" style="background-color: #4cc9f0;">MJ</div>
+                                        <div>mikej</div>
+                                    </div>
+                                </td>
+                                <td>mike.johnson@example.com</td>
+                                <td><span class="badge badge-analyst">Analyst</span></td>
+                                <td>2023-03-10 14:00</td>
+                                <td>2023-06-10 08:30</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success edit-btn" data-id="1003">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-info view-btn" data-id="1003">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="1003">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="avatar" style="background-color: #f8961e;">SW</div>
+                                        <div>sarahw</div>
+                                    </div>
+                                </td>
+                                <td>sarah.williams@example.com</td>
+                                <td><span class="badge badge-analyst">Analyst</span></td>
+                                <td>2023-04-05 16:20</td>
+                                <td>2023-05-28 13:15</td>
+                                <td><span class="status status-inactive">Inactive</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success edit-btn" data-id="1004">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-info view-btn" data-id="1004">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="1004">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="avatar" style="background-color: #f72585;">DB</div>
+                                        <div>davidb</div>
+                                    </div>
+                                </td>
+                                <td>david.brown@example.com</td>
+                                <td><span class="badge badge-manager">Manager</span></td>
+                                <td>2023-05-18 10:45</td>
+                                <td>2023-06-01 09:00</td>
+                                <td><span class="status status-suspended">Suspended</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success edit-btn" data-id="1005">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-info view-btn" data-id="1005">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="1005">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
         // Add User Button
         document.getElementById('addUserBtn').addEventListener('click', function() {
             Swal.fire({
@@ -278,7 +280,6 @@
                         'User has been added to the database.',
                         'success'
                     );
-                
                 }
             });
         });
@@ -288,10 +289,10 @@
             btn.addEventListener('click', function() {
                 const userId = this.getAttribute('data-id');
                 const userRow = this.closest('tr');
-                const username = userRow.cells[1].textContent.trim();
-                const email = userRow.cells[2].textContent;
-                const role = userRow.cells[3].querySelector('.badge').textContent;
-                const status = userRow.cells[6].querySelector('.status').textContent;
+                const username = userRow.querySelector('td:nth-child(1) div:nth-child(2)').textContent.trim();
+                const email = userRow.querySelector('td:nth-child(2)').textContent;
+                const role = userRow.querySelector('td:nth-child(3) .badge').textContent;
+                const status = userRow.querySelector('td:nth-child(6) .status').textContent;
                 
                 Swal.fire({
                     title: 'Edit User',
@@ -309,8 +310,7 @@
                                 <label>Role</label>
                                 <select id="editRole" class="swal2-input" required>
                                     <option value="Manager" ${role === 'Manager' ? 'selected' : ''}>Manager</option>
-                                    <option value="User" ${role === 'Analyst' ? 'selected' : ''}>Analyst</option>
-                                  
+                                    <option value="Analyst" ${role === 'Analyst' ? 'selected' : ''}>Analyst</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -322,10 +322,7 @@
                                     <option value="suspended" ${status === 'Suspended' ? 'selected' : ''}>Suspended</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Reset Password (leave blank to keep current)</label>
-                                <input type="password" id="editPassword" class="swal2-input" placeholder="New Password">
-                            </div>
+                        
                         </form>
                     `,
                     focusConfirm: false,
@@ -347,7 +344,6 @@
                             return false;
                         }
                         
-                        // In a real app, this would be sent to your backend
                         return { 
                             user_id: userId,
                             email, 
@@ -364,7 +360,6 @@
                             'User details have been updated in the database.',
                             'success'
                         );
-                        // Here you would typically refresh the table or update the row
                     }
                 });
             });
@@ -375,13 +370,13 @@
             btn.addEventListener('click', function() {
                 const userId = this.getAttribute('data-id');
                 const userRow = this.closest('tr');
-                const username = userRow.cells[1].textContent.trim();
-                const email = userRow.cells[2].textContent;
-                const role = userRow.cells[3].querySelector('.badge').textContent;
-                const created = userRow.cells[4].textContent;
-                const lastLogin = userRow.cells[5].textContent;
-                const status = userRow.cells[6].querySelector('.status').textContent;
-                const avatar = userRow.cells[1].querySelector('.avatar').textContent;
+                const username = userRow.querySelector('td:nth-child(1) div:nth-child(2)').textContent.trim();
+                const email = userRow.querySelector('td:nth-child(2)').textContent;
+                const role = userRow.querySelector('td:nth-child(3) .badge').textContent;
+                const created = userRow.querySelector('td:nth-child(4)').textContent;
+                const lastLogin = userRow.querySelector('td:nth-child(5)').textContent;
+                const status = userRow.querySelector('td:nth-child(6) .status').textContent;
+                const avatar = userRow.querySelector('td:nth-child(1) .avatar').textContent;
                 
                 Swal.fire({
                     title: 'User Details',
@@ -392,7 +387,7 @@
                                 <div>
                                     <h3 style="margin: 0 0 5px 0;">${username}</h3>
                                     <p style="margin: 0 0 5px 0;">User ID: ${userId}</p>
-                                    <span class="badge ${role === 'Admin' ? 'badge-admin' : role === 'Manager' ? 'badge-manager' : role === 'Support' ? 'badge-support' : 'badge-user'}" style="margin-right: 5px;">
+                                    <span class="badge ${role === 'Manager' ? 'badge-manager' : 'badge-analyst'}" style="margin-right: 5px;">
                                         ${role}
                                     </span>
                                     <span class="status ${status === 'Active' ? 'status-active' : status === 'Inactive' ? 'status-inactive' : status === 'Pending' ? 'status-pending' : 'status-suspended'}">
@@ -407,10 +402,6 @@
                                 <p><strong>Last Login:</strong> ${lastLogin || 'Never'}</p>
                             </div>
                             
-                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
-                                <h4 style="margin-top: 0;">Security Note</h4>
-                                <p>Passwords are securely hashed in the database and cannot be viewed here.</p>
-                            </div>
                         </div>
                     `,
                     confirmButtonText: 'Close',
@@ -423,7 +414,7 @@
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const userId = this.getAttribute('data-id');
-                const username = this.closest('tr').cells[1].textContent.trim();
+                const username = this.closest('tr').querySelector('td:nth-child(1) div:nth-child(2)').textContent.trim();
                 
                 Swal.fire({
                     title: 'Delete User?',

@@ -29,16 +29,20 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">project name</h2>
-                <span class="status-badge status-active" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
                 </div>
             </div>
             <ul class="sidebar-menu">
@@ -67,6 +71,7 @@
                                 <label for="notificationRecipient">Recipient</label>
                                 <select id="notificationRecipient" required>
                                     <option value="">Select Recipient</option>
+                                    <option value="all">All</option>
                                     <option value="managers">Managers</option>
                                     <option value="analyst">Analyst</option>
                                 </select>
@@ -116,7 +121,6 @@
                 priority: "normal",
                 actions: [
                     { text: "Mark as Read", type: "read", id: 1 },
-                    { text: "View Task", type: "view", id: 1 }
                 ]
             },
             {
@@ -128,7 +132,6 @@
                 priority: "high",
                 actions: [
                     { text: "Mark as Read", type: "read", id: 2 },
-                    { text: "Add to Calendar", type: "calendar", id: 2 }
                 ]
             },
             {
@@ -140,7 +143,6 @@
                 priority: "normal",
                 actions: [
                     { text: "Mark as Unread", type: "unread", id: 3 },
-                    { text: "Refresh Data", type: "refresh", id: 3 }
                 ]
             },
             {
@@ -152,7 +154,7 @@
                 priority: "urgent",
                 actions: [
                     { text: "Mark as Unread", type: "unread", id: 4 },
-                    { text: "Review Design", type: "review", id: 4 }
+                
                 ]
             }
         ];

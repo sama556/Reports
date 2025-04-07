@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StratAnalytica | Strategic Management System</title>
+    <title>Project Management | StratAnalytica</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/comman.css"/>
     <link rel="stylesheet" href="../css/project-management.css"/>
-    <style>
-    
-       
-    </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="container header-container">
             <a href="#" class="logo">
                 <i class="fas fa-chart-network"></i>
@@ -33,404 +29,589 @@
         <!-- Admin Sidebar -->
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><span class="role-badge role-admin">Admin</span></li>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="user-mangement.html"><i class="fas fa-users"></i> User Management</a></li>
-                <li><a href="Project-management.html" class="active"><i class="fas fa-project-diagram"></i> Project management</a></li>
-                <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> view projects</a></li>
+                <li><span class="badge badge-admin">Admin</span></li>
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="user-mangement.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="Project-management.html" class="active"><i class="fas fa-project-diagram"></i> <span>Project Management</span></a></li>
+                <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> <span>View Projects</span></a></li>
             </ul>
         </aside>
 
         <!-- Main Content Area -->
         <main class="main-content">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Project Management</h2>
-                    </div>
-                    
-                    <div class="action-bar">
-                        <div class="search-container">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchProjects" placeholder="Search projects...">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Project Management</h2>
+                    <button id="addProjectBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Project
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Created By</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTableBody">
+                            <!-- Projects will be loaded here via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Sample user data from your database (managers and analysts)
+        const users = [
+            { User_ID: 1, Username: "johndoe", Email: "john@example.com", Role: "manager", Name: "John Doe" },
+            { User_ID: 2, Username: "janesmith", Email: "jane@example.com", Role: "manager", Name: "Jane Smith" },
+            { User_ID: 3, Username: "mikej", Email: "mike@example.com", Role: "analyst", Name: "Mike Johnson" },
+            { User_ID: 4, Username: "sarahw", Email: "sarah@example.com", Role: "analyst", Name: "Sarah Williams" }
+        ];
+
+        // Sample project data with proper Created_By references to User_ID
+        let projects = [
+            {
+                Project_ID: 1,
+                Project_Name: "Website Redesign",
+                Description: "Complete redesign of company website with modern UI/UX",
+                Start_Date: "2023-05-01",
+                End_Date: "2023-07-15",
+                Status: "completed",
+                Created_By: 1, // References User_ID 1 (John Doe)
+                Last_Updated: "2023-07-10T14:30:00Z"
+            },
+            {
+                Project_ID: 2,
+                Project_Name: "Mobile App Development",
+                Description: "Development of cross-platform mobile application",
+                Start_Date: "2023-06-10",
+                End_Date: "2023-09-30",
+                Status: "active",
+                Created_By: 2, // References User_ID 2 (Jane Smith)
+                Last_Updated: "2023-08-15T10:45:00Z"
+            },
+            {
+                Project_ID: 3,
+                Project_Name: "CRM Implementation",
+                Description: "Implementation of new CRM system for sales team",
+                Start_Date: "2023-07-15",
+                End_Date: "2023-10-20",
+                Status: "pending",
+                Created_By: 3, // References User_ID 3 (Mike Johnson)
+                Last_Updated: "2023-07-20T16:20:00Z"
+            }
+        ];
+
+        // DOM elements
+        const projectsTableBody = document.getElementById('projectsTableBody');
+        const addProjectBtn = document.getElementById('addProjectBtn');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+            addProjectBtn.addEventListener('click', showAddProjectModal);
+        });
+
+        // Render projects to the table
+        function renderProjects() {
+            projectsTableBody.innerHTML = '';
+            
+            if (projects.length === 0) {
+                projectsTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No projects found</td></tr>';
+                return;
+            }
+            
+            projects.forEach(project => {
+                const row = document.createElement('tr');
+                
+                // Determine status class
+                let statusClass = '';
+                switch (project.Status) {
+                    case 'active': statusClass = 'status-active'; break;
+                    case 'completed': statusClass = 'status-completed'; break;
+                    case 'pending': statusClass = 'status-pending'; break;
+                    case 'cancelled': statusClass = 'status-cancelled'; break;
+                }
+                
+                // Find the creator user
+                const creator = users.find(u => u.User_ID === project.Created_By);
+                const creatorName = creator ? creator.Name : 'Unknown User';
+                
+                row.innerHTML = `
+                    <td>${project.Project_Name}</td>
+                    <td>${project.Description}</td>
+                    <td>${formatDate(project.Start_Date)}</td>
+                    <td>${formatDate(project.End_Date)}</td>
+                    <td><span class="status ${statusClass}">${capitalizeFirstLetter(project.Status)}</span></td>
+                    <td>${creatorName}</td>
+                    <td>${formatDateTime(project.Last_Updated)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-success edit-btn" data-id="${project.Project_ID}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-info view-btn" data-id="${project.Project_ID}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-danger delete-btn" data-id="${project.Project_ID}">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
-                        
-                        <button id="addProjectBtn" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add New Project
-                        </button>
-                    </div>
+                    </td>
+                `;
+                
+                projectsTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => showEditProjectModal(e.target.dataset.id));
+            });
+            
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => showViewProjectModal(e.target.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => confirmDeleteProject(e.target.dataset.id));
+            });
+        }
+
+        // Show add project modal
+        function showAddProjectModal() {
+            // Get only managers for the Created By dropdown
+            const managers = users.filter(u => u.Role === 'manager');
+            
+            Swal.fire({
+                title: 'Add New Project',
+                html: `
+                    <form id="projectForm">
+                        <div class="swal2-input-container">
+                            <label>Project Name</label>
+                            <input type="text" id="projectName" class="swal2-input" placeholder="Project Name" required>
+                        </div>
+                        <div class="swal2-input-container">
+                            <label>Description</label>
+                            <textarea id="projectDescription" class="swal2-input" placeholder="Project Description" rows="3" required></textarea>
+                        </div>
+                        <div class="swal2-input-container">
+                            <label>Start Date</label>
+                            <input type="date" id="startDate" class="swal2-input" required>
+                        </div>
+                        <div class="swal2-input-container">
+                            <label>End Date</label>
+                            <input type="date" id="endDate" class="swal2-input" required>
+                        </div>
+                        <div class="swal2-input-container">
+                            <label>Status</label>
+                            <select id="status" class="swal2-input" required>
+                                <option value="">Select Status</option>
+                                <option value="active">Active</option>
+                            
+                            </select>
+                        </div>
+                        <div class="swal2-input-container">
+                            <label>Created By (Manager)</label>
+                            <select id="createdBy" class="swal2-input" required>
+                                <option value="">Select Manager</option>
+                                ${managers.map(user => 
+                                    `<option value="${user.User_ID}">${user.Name}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                    </form>
+                `,
+                focusConfirm: false,
+                confirmButtonText: 'Add Project',
+                showCancelButton: true,
+                width: '700px',
+                preConfirm: () => {
+                    const name = document.getElementById('projectName').value;
+                    const description = document.getElementById('projectDescription').value;
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const status = document.getElementById('status').value;
+                    const createdBy = document.getElementById('createdBy').value;
                     
-                    <div class="table-container">
-                        <table class="projects-table">
-                            <thead>
-                                <tr>
-                                    <th>Project Name</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Status</th>
-                                    <th>Created By</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="projectsList">
-                                <!-- Projects will be loaded here via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                    if (!name || !description || !startDate || !endDate || !status || !createdBy) {
+                        Swal.showValidationMessage('Please fill in all fields');
+                        return false;
+                    }
                     
-                    <div class="pagination" id="pagination">
-                        <!-- Pagination will be generated via JavaScript -->
+                    if (new Date(endDate) < new Date(startDate)) {
+                        Swal.showValidationMessage('End date must be after start date');
+                        return false;
+                    }
+                    
+                    return { 
+                        Project_Name: name,
+                        Description: description,
+                        Start_Date: startDate,
+                        End_Date: endDate,
+                        Status: status,
+                        Created_By: parseInt(createdBy)
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newProject = {
+                        Project_ID: projects.length > 0 ? Math.max(...projects.map(p => p.Project_ID)) + 1 : 1,
+                        ...result.value,
+                        Last_Updated: new Date().toISOString()
+                    };
+                    
+                    projects.unshift(newProject);
+                    renderProjects();
+                    
+                    Swal.fire(
+                        'Success!',
+                        'Project has been added.',
+                        'success'
+                    );
+                }
+            });
+        }
+
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Get the closest button if clicking on an icon inside the button
+        const button = e.target.closest('.edit-btn');
+        const projectId = button.getAttribute('data-id');
+        showEditProjectModal(projectId);
+    });
+});
+
+document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Get the closest button if clicking on an icon inside the button
+        const button = e.target.closest('.view-btn');
+        const projectId = button.getAttribute('data-id');
+        showViewProjectModal(projectId);
+    });
+});
+
+document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Get the closest button if clicking on an icon inside the button
+        const button = e.target.closest('.delete-btn');
+        const projectId = button.getAttribute('data-id');
+        confirmDeleteProject(projectId);
+    });
+});
+
+// Fix the showViewProjectModal function to handle potential undefined projects
+function showViewProjectModal(projectId) {
+    const project = projects.find(p => p.Project_ID === parseInt(projectId));
+    
+    if (!project) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Project not found!',
+            icon: 'error',
+            confirmButtonText: 'Close'
+        });
+        return;
+    }
+    
+    const creator = users.find(u => u.User_ID === project.Created_By);
+    
+    let statusClass = '';
+    switch (project.Status) {
+        case 'active': statusClass = 'status-active'; break;
+        case 'completed': statusClass = 'status-completed'; break;
+        case 'pending': statusClass = 'status-pending'; break;
+        case 'cancelled': statusClass = 'status-cancelled'; break;
+    }
+    
+    Swal.fire({
+        title: project.Project_Name,
+        html: `
+            <div style="text-align: left;">
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Description:</strong> ${project.Description}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <p><strong>Start Date:</strong> ${formatDate(project.Start_Date)}</p>
+                        <p><strong>End Date:</strong> ${formatDate(project.End_Date)}</p>
+                        <p><strong>Status:</strong> <span class="status ${statusClass}">${capitalizeFirstLetter(project.Status)}</span></p>
+                    </div>
+                    <div>
+                        <p><strong>Created By:</strong> ${creator ? creator.Name : 'Unknown'} (${creator ? creator.Role : 'Unknown'})</p>
+                        <p><strong>Email:</strong> ${creator ? creator.Email : 'N/A'}</p>
+                        <p><strong>Last Updated:</strong> ${formatDateTime(project.Last_Updated)}</p>
+                        <p><strong>Project ID:</strong> ${project.Project_ID}</p>
                     </div>
                 </div>
-            </main>
+            </div>
+        `,
+        confirmButtonText: 'Close',
+        width: '700px'
+    });
+}
+
+// Fix the showEditProjectModal function to handle potential undefined projects
+function showEditProjectModal(projectId) {
+    const project = projects.find(p => p.Project_ID === parseInt(projectId));
+    
+    if (!project) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Project not found!',
+            icon: 'error',
+            confirmButtonText: 'Close'
+        });
+        return;
+    }
+    
+    const managers = users.filter(u => u.Role === 'manager');
+    
+    Swal.fire({
+        title: 'Edit Project',
+        html: `
+            <form id="projectForm">
+                <div class="swal2-input-container">
+                    <label>Project Name</label>
+                    <input type="text" id="projectName" class="swal2-input" value="${project.Project_Name}" required>
+                </div>
+                <div class="swal2-input-container">
+                    <label>Description</label>
+                    <textarea id="projectDescription" class="swal2-input" rows="3" required>${project.Description}</textarea>
+                </div>
+                <div class="swal2-input-container">
+                    <label>Start Date</label>
+                    <input type="date" id="startDate" class="swal2-input" value="${project.Start_Date}" required>
+                </div>
+                <div class="swal2-input-container">
+                    <label>End Date</label>
+                    <input type="date" id="endDate" class="swal2-input" value="${project.End_Date}" required>
+                </div>
+                <div class="swal2-input-container">
+                    <label>Status</label>
+                    <select id="status" class="swal2-input" required>
+                        <option value="active" ${project.Status === 'active' ? 'selected' : ''}>Active</option>
+                        <option value="pending" ${project.Status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="completed" ${project.Status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="cancelled" ${project.Status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="swal2-input-container">
+                    <label>Created By (Manager)</label>
+                    <select id="createdBy" class="swal2-input" required>
+                        ${managers.map(user => 
+                            `<option value="${user.User_ID}" ${project.Created_By === user.User_ID ? 'selected' : ''}>
+                                ${user.Name}
+                            </option>`
+                        ).join('')}
+                    </select>
+                </div>
+            </form>
+        `,
+        focusConfirm: false,
+        confirmButtonText: 'Save Changes',
+        showCancelButton: true,
+        width: '700px',
+        preConfirm: () => {
+            const name = document.getElementById('projectName').value;
+            const description = document.getElementById('projectDescription').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const status = document.getElementById('status').value;
+            const createdBy = document.getElementById('createdBy').value;
+            
+            if (!name || !description || !startDate || !endDate || !status || !createdBy) {
+                Swal.showValidationMessage('Please fill in all fields');
+                return false;
+            }
+            
+            if (new Date(endDate) < new Date(startDate)) {
+                Swal.showValidationMessage('End date must be after start date');
+                return false;
+            }
+            
+            return { 
+                Project_Name: name,
+                Description: description,
+                Start_Date: startDate,
+                End_Date: endDate,
+                Status: status,
+                Created_By: parseInt(createdBy)
+            };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const updatedProject = {
+                ...project,
+                ...result.value,
+                Last_Updated: new Date().toISOString()
+            };
+            
+            const index = projects.findIndex(p => p.Project_ID === project.Project_ID);
+            if (index !== -1) {
+                projects[index] = updatedProject;
+                renderProjects();
+                
+                Swal.fire(
+                    'Success!',
+                    'Project has been updated.',
+                    'success'
+                );
+            }
+        }
+    });
+}
+
+// Fix the confirmDeleteProject function to handle potential undefined projects
+function confirmDeleteProject(projectId) {
+    const project = projects.find(p => p.Project_ID === parseInt(projectId));
+    
+    if (!project) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Project not found!',
+            icon: 'error',
+            confirmButtonText: 'Close'
+        });
+        return;
+    }
+    
+    Swal.fire({
+        title: 'Delete Project?',
+        html: `Are you sure you want to delete <strong>${project.Project_Name}</strong> (ID: ${project.Project_ID})?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            projects = projects.filter(p => p.Project_ID !== parseInt(projectId));
+            renderProjects();
+            
+            Swal.fire(
+                'Deleted!',
+                'Project has been deleted.',
+                'success'
+            );
+        }
+    });
+}
+
+// Fix the renderProjects function to correctly add event listeners
+function renderProjects() {
+    projectsTableBody.innerHTML = '';
+    
+    if (projects.length === 0) {
+        projectsTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No projects found</td></tr>';
+        return;
+    }
+    
+    projects.forEach(project => {
+        const row = document.createElement('tr');
         
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script>
-                // Sample data
-                let projects = [
-                    { id: 1, name: 'Website Redesign', startDate: '2023-05-01', endDate: '2023-07-15', status: 'completed', createdBy: 'John Doe' },
-                    { id: 2, name: 'Mobile App Development', startDate: '2023-06-10', endDate: '2023-09-30', status: 'active', createdBy: 'Jane Smith' },
-                    { id: 3, name: 'CRM Implementation', startDate: '2023-07-15', endDate: '2023-10-20', status: 'pending', createdBy: 'Mike Johnson' },
-                    { id: 4, name: 'Marketing Campaign', startDate: '2023-08-01', endDate: '2023-08-31', status: 'cancelled', createdBy: 'Sarah Williams' },
-                ];
-            
-                // DOM elements
-                const projectsList = document.getElementById('projectsList');
-                const addProjectBtn = document.getElementById('addProjectBtn');
-                const searchInput = document.getElementById('searchProjects');
-                const pagination = document.getElementById('pagination');
-            
-                // Pagination variables
-                let currentPage = 1;
-                const projectsPerPage = 5;
-            
-                // Initialize the page
-                document.addEventListener('DOMContentLoaded', () => {
-                    renderProjects();
-                    setupPagination();
-                    
-                    // Add event listeners
-                    addProjectBtn.addEventListener('click', showAddProjectModal);
-                    searchInput.addEventListener('input', handleSearch);
-                });
-            
-                // Render projects to the table
-                function renderProjects(filteredProjects = projects) {
-                    projectsList.innerHTML = '';
-                    
-                    // Calculate pagination
-                    const startIndex = (currentPage - 1) * projectsPerPage;
-                    const endIndex = startIndex + projectsPerPage;
-                    const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
-                    
-                    if (paginatedProjects.length === 0) {
-                        projectsList.innerHTML = '<tr><td colspan="6" style="text-align: center;">No projects found</td></tr>';
-                        return;
-                    }
-                    
-                    paginatedProjects.forEach(project => {
-                        const row = document.createElement('tr');
-                        
-                        // Determine status class
-                        let statusClass = '';
-                        switch (project.status) {
-                            case 'active': statusClass = 'status-active'; break;
-                            case 'completed': statusClass = 'status-completed'; break;
-                            case 'pending': statusClass = 'status-pending'; break;
-                            case 'cancelled': statusClass = 'status-cancelled'; break;
-                        }
-                        
-                        row.innerHTML = `
-                            <td>${project.name}</td>
-                            <td>${formatDate(project.startDate)}</td>
-                            <td>${formatDate(project.endDate)}</td>
-                            <td><span class="status ${statusClass}">${capitalizeFirstLetter(project.status)}</span></td>
-                            <td>${project.createdBy}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-success edit-btn" data-id="${project.id}">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger delete-btn" data-id="${project.id}">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </div>
-                            </td>
-                        `;
-                        
-                        projectsList.appendChild(row);
-                    });
-                    
-                    // Add event listeners to buttons
-                    document.querySelectorAll('.edit-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => showEditProjectModal(e.target.dataset.id));
-                    });
-                    
-                    document.querySelectorAll('.delete-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => confirmDeleteProject(e.target.dataset.id));
-                    });
-                }
-            
-                // Setup pagination
-                function setupPagination(filteredProjects = projects) {
-                    pagination.innerHTML = '';
-                    const pageCount = Math.ceil(filteredProjects.length / projectsPerPage);
-                    
-                    if (pageCount <= 1) return;
-                    
-                    // Previous button
-                    const prevBtn = document.createElement('button');
-                    prevBtn.className = `page-btn ${currentPage === 1 ? 'disabled' : ''}`;
-                    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-                    prevBtn.addEventListener('click', () => {
-                        if (currentPage > 1) {
-                            currentPage--;
-                            renderProjects(filteredProjects);
-                            setupPagination(filteredProjects);
-                        }
-                    });
-                    pagination.appendChild(prevBtn);
-                    
-                    // Page buttons
-                    for (let i = 1; i <= pageCount; i++) {
-                        const pageBtn = document.createElement('button');
-                        pageBtn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
-                        pageBtn.textContent = i;
-                        pageBtn.addEventListener('click', () => {
-                            currentPage = i;
-                            renderProjects(filteredProjects);
-                            setupPagination(filteredProjects);
-                        });
-                        pagination.appendChild(pageBtn);
-                    }
-                    
-                    // Next button
-                    const nextBtn = document.createElement('button');
-                    nextBtn.className = `page-btn ${currentPage === pageCount ? 'disabled' : ''}`;
-                    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-                    nextBtn.addEventListener('click', () => {
-                        if (currentPage < pageCount) {
-                            currentPage++;
-                            renderProjects(filteredProjects);
-                            setupPagination(filteredProjects);
-                        }
-                    });
-                    pagination.appendChild(nextBtn);
-                }
-            
-                // Handle search
-                function handleSearch() {
-                    const searchTerm = searchInput.value.toLowerCase();
-                    if (searchTerm === '') {
-                        currentPage = 1;
-                        renderProjects(projects);
-                        setupPagination(projects);
-                        return;
-                    }
-                    
-                    const filteredProjects = projects.filter(project => 
-                        project.name.toLowerCase().includes(searchTerm) || 
-                        project.createdBy.toLowerCase().includes(searchTerm) ||
-                        project.status.toLowerCase().includes(searchTerm)
-                    );
-                    
-                    currentPage = 1;
-                    renderProjects(filteredProjects);
-                    setupPagination(filteredProjects);
-                }
-            
-                // Show add project modal
-                function showAddProjectModal() {
-                    Swal.fire({
-                        title: 'Add New Project',
-                        html: `
-                            <form id="projectForm">
-                                <div class="swal2-input-container">
-                                    <input type="text" id="projectName" class="swal2-input" placeholder="Project Name" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="date" id="startDate" class="swal2-input" placeholder="Start Date" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="date" id="endDate" class="swal2-input" placeholder="End Date" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <select id="status" class="swal2-input" required>
-                                        <option value="">Select Status</option>
-                                        <option value="active">Active</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="text" id="createdBy" class="swal2-input" placeholder="Created By" required>
-                                </div>
-                            </form>
-                        `,
-                        focusConfirm: false,
-                        preConfirm: () => {
-                            const name = document.getElementById('projectName').value;
-                            const startDate = document.getElementById('startDate').value;
-                            const endDate = document.getElementById('endDate').value;
-                            const status = document.getElementById('status').value;
-                            const createdBy = document.getElementById('createdBy').value;
-                            
-                            if (!name || !startDate || !endDate || !status || !createdBy) {
-                                Swal.showValidationMessage('Please fill in all fields');
-                                return false;
-                            }
-                            
-                            if (new Date(endDate) < new Date(startDate)) {
-                                Swal.showValidationMessage('End date must be after start date');
-                                return false;
-                            }
-                            
-                            return { name, startDate, endDate, status, createdBy };
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const newProject = {
-                                id: projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1,
-                                name: result.value.name,
-                                startDate: result.value.startDate,
-                                endDate: result.value.endDate,
-                                status: result.value.status,
-                                createdBy: result.value.createdBy
-                            };
-                            
-                            projects.unshift(newProject);
-                            currentPage = 1;
-                            renderProjects();
-                            setupPagination();
-                            
-                            Swal.fire(
-                                'Success!',
-                                'Project has been added.',
-                                'success'
-                            );
-                        }
-                    });
-                }
-            
-                // Show edit project modal
-                function showEditProjectModal(projectId) {
-                    const project = projects.find(p => p.id === parseInt(projectId));
-                    
-                    Swal.fire({
-                        title: 'Edit Project',
-                        html: `
-                            <form id="projectForm">
-                                <div class="swal2-input-container">
-                                    <input type="text" id="projectName" class="swal2-input" placeholder="Project Name" value="${project.name}" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="date" id="startDate" class="swal2-input" placeholder="Start Date" value="${project.startDate}" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="date" id="endDate" class="swal2-input" placeholder="End Date" value="${project.endDate}" required>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <select id="status" class="swal2-input" required>
-                                        <option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option>
-                                        <option value="pending" ${project.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                        <option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option>
-                                        <option value="cancelled" ${project.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-                                    </select>
-                                </div>
-                                <div class="swal2-input-container">
-                                    <input type="text" id="createdBy" class="swal2-input" placeholder="Created By" value="${project.createdBy}" required>
-                                </div>
-                            </form>
-                        `,
-                        focusConfirm: false,
-                        preConfirm: () => {
-                            const name = document.getElementById('projectName').value;
-                            const startDate = document.getElementById('startDate').value;
-                            const endDate = document.getElementById('endDate').value;
-                            const status = document.getElementById('status').value;
-                            const createdBy = document.getElementById('createdBy').value;
-                            
-                            if (!name || !startDate || !endDate || !status || !createdBy) {
-                                Swal.showValidationMessage('Please fill in all fields');
-                                return false;
-                            }
-                            
-                            if (new Date(endDate) < new Date(startDate)) {
-                                Swal.showValidationMessage('End date must be after start date');
-                                return false;
-                            }
-                            
-                            return { name, startDate, endDate, status, createdBy };
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const updatedProject = {
-                                id: project.id,
-                                name: result.value.name,
-                                startDate: result.value.startDate,
-                                endDate: result.value.endDate,
-                                status: result.value.status,
-                                createdBy: result.value.createdBy
-                            };
-                            
-                            const index = projects.findIndex(p => p.id === project.id);
-                            if (index !== -1) {
-                                projects[index] = updatedProject;
-                                renderProjects();
-                                
-                                Swal.fire(
-                                    'Success!',
-                                    'Project has been updated.',
-                                    'success'
-                                );
-                            }
-                        }
-                    });
-                }
-            
-                // Confirm project deletion
-                function confirmDeleteProject(projectId) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            projects = projects.filter(project => project.id !== parseInt(projectId));
-                            renderProjects();
-                            
-                            // Reset to first page if current page is empty
-                            const startIndex = (currentPage - 1) * projectsPerPage;
-                            if (projects.slice(startIndex, startIndex + projectsPerPage).length === 0 && currentPage > 1) {
-                                currentPage--;
-                            }
-                            
-                            renderProjects();
-                            setupPagination();
-                            
-                            Swal.fire(
-                                'Deleted!',
-                                'Project has been deleted.',
-                                'success'
-                            );
-                        }
-                    });
-                }
-            
-                // Helper functions
-                function formatDate(dateString) {
-                    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-                    return new Date(dateString).toLocaleDateString(undefined, options);
-                }
-            
-                function capitalizeFirstLetter(string) {
-                    return string.charAt(0).toUpperCase() + string.slice(1);
-                }
-            </script>
-        </body>
-        </html>
+        // Determine status class
+        let statusClass = '';
+        switch (project.Status) {
+            case 'active': statusClass = 'status-active'; break;
+            case 'completed': statusClass = 'status-completed'; break;
+            case 'pending': statusClass = 'status-pending'; break;
+            case 'cancelled': statusClass = 'status-cancelled'; break;
+        }
         
+        // Find the creator user
+        const creator = users.find(u => u.User_ID === project.Created_By);
+        const creatorName = creator ? creator.Name : 'Unknown User';
+        
+        row.innerHTML = `
+            <td>${project.Project_Name}</td>
+            <td>${project.Description}</td>
+            <td>${formatDate(project.Start_Date)}</td>
+            <td>${formatDate(project.End_Date)}</td>
+            <td><span class="status ${statusClass}">${capitalizeFirstLetter(project.Status)}</span></td>
+            <td>${creatorName}</td>
+            <td>${formatDateTime(project.Last_Updated)}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn btn-success edit-btn" data-id="${project.Project_ID}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-info view-btn" data-id="${project.Project_ID}">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-danger delete-btn" data-id="${project.Project_ID}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        
+        projectsTableBody.appendChild(row);
+    });
+    
+    // Add event listeners to buttons with improved event delegation
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const button = e.target.closest('.edit-btn');
+            if (button) {
+                const projectId = button.getAttribute('data-id');
+                showEditProjectModal(projectId);
+            }
+        });
+    });
+    
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const button = e.target.closest('.view-btn');
+            if (button) {
+                const projectId = button.getAttribute('data-id');
+                showViewProjectModal(projectId);
+            }
+        });
+    });
+    
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const button = e.target.closest('.delete-btn');
+            if (button) {
+                const projectId = button.getAttribute('data-id');
+                confirmDeleteProject(projectId);
+            }
+        });
+    });
+}
+        // Helper functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        function formatDateTime(dateTimeString) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateTimeString).toLocaleString(undefined, options);
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+</html>

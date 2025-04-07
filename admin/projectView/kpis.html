@@ -29,16 +29,20 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">project name</h2>
-                <span class="status-badge status-active" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
+                </div>
+                <div class="project-meta">
+                    <i class="fas fa-chart-pie"></i>
+                    <span id="projectProgress">Progress: 65%</span>
                 </div>
             </div>
             <ul class="sidebar-menu">
@@ -78,15 +82,6 @@
                     </table>
                 </div>
                 
-                <!-- Empty State -->
-                <div id="emptyState" class="empty-state">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <h3>No KPIs Found</h3>
-                    <p>Add your first KPI to start tracking performance metrics</p>
-                    <button class="btn-primary" onclick="showAddKpiDialog()">
-                        <i class="fas fa-plus"></i> Add KPI
-                    </button>
-                </div>
             </div>
         </main>
     </div>
@@ -159,14 +154,7 @@
         function renderKPIs(kpisToRender) {
             kpiTableBody.innerHTML = '';
             
-            if (kpisToRender.length === 0) {
-                tableView.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            } else {
-                tableView.style.display = 'block';
-                emptyState.style.display = 'none';
-            }
+            
             
             kpisToRender.forEach(kpi => {
                 // Render table row
@@ -174,42 +162,6 @@
                 tableRow.innerHTML = createKpiTableRowHTML(kpi);
                 kpiTableBody.appendChild(tableRow);
             });
-        }
-
-        // Create HTML for a KPI table row
-        function createKpiTableRowHTML(kpi) {
-            const statusClass = `status-${kpi.status}`;
-            const statusText = getStatusText(kpi.status);
-            const progressPercent = Math.min(100, (kpi.currentValue / kpi.targetValue) * 100);
-            const formattedDate = formatDate(kpi.updatedAt);
-            
-            return `
-                <td>
-                    <strong>${kpi.name}</strong><br>
-                    <small style="color: #7f8c8d;">${kpi.description}</small>
-                </td>
-                <td>${kpi.currentValue}%</td>
-                <td>${kpi.targetValue}%</td>
-                <td>
-                    ${progressPercent.toFixed(1)}%
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: ${progressPercent}%"></div>
-                    </div>
-                </td>
-                <td><span class="kpi-status ${statusClass}">${statusText}</span></td>
-                <td>${kpi.dataSourceName}</td>
-                <td>${formattedDate}</td>
-                <td>
-                    <div class="source-actions">
-                    <button class="btn-primary btn-sm" onclick="viewKpiDetails(${kpi.id})">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn-secondary btn-sm" onclick="editKpi(${kpi.id})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    </div>
-                </td>
-            `;
         }
 
         // KPI actions
@@ -266,110 +218,46 @@
                     </div>
                 `,
                 showCancelButton: true,
-                confirmButtonText: 'Edit',
                 cancelButtonText: 'Close',
-                showDenyButton: true,
-                denyButtonText: 'Delete',
+                
                 denyButtonColor: '#e74c3c',
-                focusConfirm: false,
+                
                 width: '600px'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    editKpi(kpiId);
-                } else if (result.isDenied) {
-                    deleteKpi(kpiId);
-                }
-            });
+            })
         }
-
-        function editKpi(kpiId) {
-            const kpi = kpis.find(k => k.id === kpiId);
-            if (!kpi) return;
-            
-            Swal.fire({
-                title: 'Edit KPI',
-                html: `
-                    <div style="text-align: left;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">KPI Name</label>
-                            <input id="editKpiName" class="swal2-input" value="${kpi.name}">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Description</label>
-                            <textarea id="editKpiDescription" class="swal2-textarea">${kpi.description}</textarea>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Calculation Method</label>
-                            <textarea id="editKpiCalculation" class="swal2-textarea">${kpi.calculation}</textarea>
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Target Value</label>
-                            <input id="editKpiTarget" class="swal2-input" type="number" value="${kpi.targetValue}">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Current Value</label>
-                            <input id="editKpiCurrent" class="swal2-input" type="number" value="${kpi.currentValue}">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Data Source</label>
-                            <select id="editKpiDataSource" class="swal2-select">
-                                <option value="1" ${kpi.dataSourceId === 1 ? 'selected' : ''}>Tasks Table</option>
-                                <option value="2" ${kpi.dataSourceId === 2 ? 'selected' : ''}>Feedback Table</option>
-                                <option value="3" ${kpi.dataSourceId === 3 ? 'selected' : ''}>Budget Table</option>
-                                <option value="4" ${kpi.dataSourceId === 4 ? 'selected' : ''}>Sales Table</option>
-                            </select>
-                        </div>
-                    </div>
-                `,
-                focusConfirm: false,
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('editKpiName').value,
-                        description: document.getElementById('editKpiDescription').value,
-                        calculation: document.getElementById('editKpiCalculation').value,
-                        targetValue: document.getElementById('editKpiTarget').value,
-                        currentValue: document.getElementById('editKpiCurrent').value,
-                        dataSourceId: document.getElementById('editKpiDataSource').value
-                    };
-                },
-                width: '600px'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // In a real app, you would update the KPI in your data array here
-                    // For now, we'll just show a success message
-                    Swal.fire({
-                        title: 'Updated!',
-                        text: `KPI "${result.value.name}" has been updated successfully.`,
-                        icon: 'success'
-                    });
-                }
-            });
-        }
-
-        function deleteKpi(kpiId) {
-            const kpi = kpis.find(k => k.id === kpiId);
-            if (!kpi) return;
-            
-            Swal.fire({
-                title: 'Delete KPI?',
-                text: `Are you sure you want to delete "${kpi.name}"? This action cannot be undone.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#e74c3c'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // In a real app, you would remove the KPI from your data array here
-                    // For now, we'll just show a success message
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: `KPI "${kpi.name}" has been deleted.`,
-                        icon: 'success'
-                    });
-                }
-            });
-        }
+// Create HTML for a KPI table row
+function createKpiTableRowHTML(kpi) {
+    const progressPercent = Math.min(100, (kpi.currentValue / kpi.targetValue) * 100);
+    const statusClass = `status-${kpi.status}`;
+    const statusText = getStatusText(kpi.status);
+    const formattedDate = formatDate(kpi.updatedAt);
+    
+    return `
+        <td>
+            <div class="kpi-name">${kpi.name}</div>
+            <div class="kpi-description">${kpi.description}</div>
+        </td>
+        <td>${kpi.currentValue}%</td>
+        <td>${kpi.targetValue}%</td>
+        <td>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: ${progressPercent}%"></div>
+            </div>
+            <div class="progress-text">${progressPercent.toFixed(1)}%</div>
+        </td>
+        <td>
+            <span class="status-badge ${statusClass}">${statusText}</span>
+        </td>
+        <td>${kpi.dataSourceName}</td>
+        <td>${formattedDate}</td>
+        <td>
+            <button class="btn-primary btn-sm view-btn" onclick="viewKpiDetails(${kpi.id})">
+                <i class="fas fa-eye"></i> View
+            </button>
+        </td>
+    `;
+}
+       
 
         // Helper functions
         function getStatusText(status) {
