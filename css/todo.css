@@ -65,7 +65,8 @@ body {
 /* Kanban Board */
 .kanban-board {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -259,7 +260,7 @@ body {
 }
 
 .task-btn {
-    padding: 6px 12px;
+    padding: 6px 3px;
     border-radius: 4px;
     font-size: 0.8rem;
     border: none;
@@ -447,4 +448,11 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+.view-btn{
+    padding: 5px;
+    background-color: lightseagreen;
+    color: #fff;
+    border: none;
+
 }

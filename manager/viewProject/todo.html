@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/comman.css"/>
     <link rel="stylesheet" href="../../css/todo.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -31,16 +33,16 @@
     <div class="dashboard">
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">Project Name</h2>
-                <span class="project-status" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-chart-pie"></i>
@@ -54,7 +56,6 @@
                 <li><a href="../../manager/viewProject/Sales-Performance.html" ><i class="fas fa-chart-line"></i> Sales Performance</a></li>
                 <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
                 <li><a href="../../manager/viewProject/todo.html" class="active"><i class="fas fa-tasks"></i> To-do List</a></li>
-                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
                 <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
             </ul>
@@ -65,7 +66,7 @@
                 <div class="container">
                     <div class="kanban-header">
                         <h1>To do LIST </h1>
-                        <button class="add-btn" id="addTaskBtn"><i class="fas fa-plus"></i> Add New Task</button>
+                        <!-- Removed Add New Task button since manager shouldn't add tasks -->
                     </div>
                     
                     <div class="kanban-board" id="kanbanBoard">
@@ -111,54 +112,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- New Task Form -->
-                    <div class="task-form-container" id="newTaskForm" style="display: none;">
-                        <div class="form-title">
-                            <i class="fas fa-plus-circle"></i>
-                            <h2>Add New Task</h2>
-                        </div>
-                        <form class="task-form" id="taskForm">
-                            <div class="form-group">
-                                <label for="taskDescription">Task Description</label>
-                                <textarea id="taskDescription" placeholder="Describe the task..." required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="assignedTo">Assign To</label>
-                                <select id="assignedTo" required>
-                                    <option value="">Select team member</option>
-                                    <option value="Sami Alharbi">Sami Alharbi</option>
-                                    <option value="Layla Mahmoud">Layla Mahmoud</option>
-                                    <option value="Nasser Faisal">Nasser Faisal</option>
-                                    <option value="Omar Khalid">Omar Khalid</option>
-                                    <option value="Amira Hassan">Amira Hassan</option>
-                                    <option value="Khalid Rahman">Khalid Rahman</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="dueDate">Due Date</label>
-                                <input type="text" id="dueDate" placeholder="Select due date" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="taskPriority">Priority</label>
-                                <select id="taskPriority" required>
-                                    <option value="">Select priority</option>
-                                    <option value="high">High</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="low">Low</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="initialNotes">Initial Notes</label>
-                                <textarea id="initialNotes" placeholder="Add any initial notes..."></textarea>
-                            </div>
-                            <div class="form-group full-width">
-                                <button type="submit" class="submit-btn">Create Task</button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
-                
             </div>
         </main>
     </div>
@@ -176,7 +130,8 @@
                 notes: [
                     "Need to align with brand guidelines",
                     "Client wants modern look"
-                ]
+                ],
+                dependencies: []
             },
             {
                 id: 2,
@@ -189,7 +144,8 @@
                 notes: [
                     "OAuth integration needed",
                     "Password reset flow pending"
-                ]
+                ],
+                dependencies: [1] // Depends on task ID 1
             },
             {
                 id: 3,
@@ -202,7 +158,8 @@
                 notes: [
                     "Documented all endpoints",
                     "Added example requests"
-                ]
+                ],
+                dependencies: []
             },
             {
                 id: 4,
@@ -215,7 +172,8 @@
                 notes: [
                     "Reported by multiple users",
                     "Affects iOS devices"
-                ]
+                ],
+                dependencies: []
             },
             {
                 id: 5,
@@ -228,7 +186,8 @@
                 notes: [
                     "Identified slow queries",
                     "Indexing in progress"
-                ]
+                ],
+                dependencies: [2] // Depends on task ID 2
             }
         ];
 
@@ -237,18 +196,9 @@
         const todoList = document.getElementById('todoList');
         const inProgressList = document.getElementById('inProgressList');
         const doneList = document.getElementById('doneList');
-        const addTaskBtn = document.getElementById('addTaskBtn');
-        const newTaskForm = document.getElementById('newTaskForm');
-        const taskForm = document.getElementById('taskForm');
         const todoCount = document.getElementById('todoCount');
         const inProgressCount = document.getElementById('inProgressCount');
         const doneCount = document.getElementById('doneCount');
-
-        // Initialize date picker
-        flatpickr("#dueDate", {
-            minDate: "today",
-            dateFormat: "Y-m-d"
-        });
 
         // Render tasks on the board
         function renderTasks() {
@@ -291,7 +241,7 @@
             const card = document.createElement('div');
             card.className = `task-card priority-${task.priority}`;
             card.dataset.id = task.id;
-            card.draggable = true;
+            card.draggable = false; // Disable dragging for manager
             
             // Check if task is overdue
             const today = new Date();
@@ -303,6 +253,12 @@
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'
+            });
+            
+            // Get dependency names
+            const dependencyNames = task.dependencies.map(depId => {
+                const depTask = tasks.find(t => t.id === depId);
+                return depTask ? `#${depId} (${depTask.description.substring(0, 20)}...)` : `#${depId}`;
             });
             
             card.innerHTML = `
@@ -321,6 +277,12 @@
                     <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(task.assignedTo)}&background=random" alt="${task.assignedTo}">
                     <span>${task.assignedTo}</span>
                 </div>
+                ${task.dependencies.length > 0 ? `
+                <div class="task-dependencies">
+                    <i class="fas fa-link"></i>
+                    Depends on: ${dependencyNames.join(', ')}
+                </div>
+                ` : ''}
                 ${task.status !== 'done' ? `
                 <div class="task-progress">
                     <div class="progress-header">
@@ -346,6 +308,9 @@
                     <button class="task-btn add-note-btn" data-id="${task.id}">
                         <i class="fas fa-plus-circle"></i> ${task.notes.length > 0 ? `Notes (${task.notes.length})` : 'Add Note'}
                     </button>
+                    <button class="task-btn view-details-btn" data-id="${task.id}">
+                        <i class="fas fa-info-circle"></i> Details
+                    </button>
                 </div>
             `;
             
@@ -369,10 +334,9 @@
                 btn.addEventListener('click', handleAddNote);
             });
             
-            // Add drag events to cards
-            document.querySelectorAll('.task-card').forEach(card => {
-                card.addEventListener('dragstart', handleDragStart);
-                card.addEventListener('dragend', handleDragEnd);
+            // View details buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', handleViewDetails);
             });
         }
 
@@ -380,6 +344,27 @@
         function handleUpdateProgress(e) {
             const taskId = parseInt(e.currentTarget.dataset.id);
             const task = tasks.find(t => t.id === taskId);
+            
+            // Check if all dependencies are completed
+            const incompleteDependencies = task.dependencies.filter(depId => {
+                const depTask = tasks.find(t => t.id === depId);
+                return depTask && depTask.status !== 'done';
+            });
+            
+            if (incompleteDependencies.length > 0) {
+                const dependencyNames = incompleteDependencies.map(depId => {
+                    const depTask = tasks.find(t => t.id === depId);
+                    return depTask ? `#${depId} (${depTask.description.substring(0, 20)}...)` : `#${depId}`;
+                });
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Dependencies Not Completed',
+                    html: `This task cannot be updated because it depends on:<br><strong>${dependencyNames.join(', ')}</strong><br><br>Please complete the dependencies first.`,
+                    confirmButtonColor: '#4a6bdf'
+                });
+                return;
+            }
             
             Swal.fire({
                 title: 'Update Task Progress',
@@ -440,6 +425,27 @@
         function handleCompleteTask(e) {
             const taskId = parseInt(e.currentTarget.dataset.id);
             const task = tasks.find(t => t.id === taskId);
+            
+            // Check if all dependencies are completed
+            const incompleteDependencies = task.dependencies.filter(depId => {
+                const depTask = tasks.find(t => t.id === depId);
+                return depTask && depTask.status !== 'done';
+            });
+            
+            if (incompleteDependencies.length > 0) {
+                const dependencyNames = incompleteDependencies.map(depId => {
+                    const depTask = tasks.find(t => t.id === depId);
+                    return depTask ? `#${depId} (${depTask.description.substring(0, 20)}...)` : `#${depId}`;
+                });
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Dependencies Not Completed',
+                    html: `This task cannot be completed because it depends on:<br><strong>${dependencyNames.join(', ')}</strong><br><br>Please complete the dependencies first.`,
+                    confirmButtonColor: '#4a6bdf'
+                });
+                return;
+            }
             
             Swal.fire({
                 title: 'Mark Task as Complete?',
@@ -520,122 +526,124 @@
             });
         }
 
-        // Handle form submission
-        taskForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Handle view details button click
+        function handleViewDetails(e) {
+            const taskId = parseInt(e.currentTarget.dataset.id);
+            const task = tasks.find(t => t.id === taskId);
             
-            const newTask = {
-                id: tasks.length > 0 ? Math.max(...tasks.map(task => task.id)) + 1 : 1,
-                description: document.getElementById('taskDescription').value,
-                assignedTo: document.getElementById('assignedTo').value,
-                dueDate: document.getElementById('dueDate').value,
-                priority: document.getElementById('taskPriority').value,
-                status: 'todo',
-                progress: 0,
-                notes: document.getElementById('initialNotes').value ? 
-                    [document.getElementById('initialNotes').value] : []
-            };
+            // Get dependency details
+            const dependencyDetails = task.dependencies.map(depId => {
+                const depTask = tasks.find(t => t.id === depId);
+                if (!depTask) return null;
+                
+                const isCompleted = depTask.status === 'done';
+                return {
+                    id: depTask.id,
+                    description: depTask.description,
+                    status: depTask.status,
+                    isCompleted: isCompleted,
+                    assignedTo: depTask.assignedTo
+                };
+            }).filter(Boolean);
             
-            tasks.unshift(newTask);
+            // Format due date
+            const dueDate = new Date(task.dueDate);
+            const formattedDate = dueDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            // Create HTML for dependencies
+            let dependenciesHtml = '<p>No dependencies</p>';
+            if (dependencyDetails.length > 0) {
+                dependenciesHtml = `
+                    <div style="max-height: 200px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #f5f7fa;">
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">ID</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Description</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Status</th>
+                                    <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Assigned To</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dependencyDetails.map(dep => `
+                                    <tr>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">#${dep.id}</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${dep.description}</td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">
+                                            <span class="task-status ${dep.status === 'done' ? 'completed' : dep.status === 'in-progress' ? 'in-progress' : 'todo'}">
+                                                ${dep.status === 'done' ? 'Completed' : dep.status === 'in-progress' ? 'In Progress' : 'To Do'}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${dep.assignedTo}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            // Create HTML for notes
+            let notesHtml = '<p>No notes</p>';
+            if (task.notes.length > 0) {
+                notesHtml = `
+                    <div style="max-height: 150px; overflow-y: auto; background-color: #f5f7fa; padding: 10px; border-radius: 4px;">
+                        <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                            ${task.notes.map(note => `<li style="padding: 8px; border-bottom: 1px solid #ddd; margin-bottom: 5px;">${note}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
             
             Swal.fire({
-                icon: 'success',
-                title: 'Task Created',
-                text: 'The new task has been added to your board.',
-                confirmButtonColor: '#4a6bdf'
-            }).then(() => {
-                // Reset form and hide it
-                taskForm.reset();
-                document.getElementById('dueDate').value = '';
-                newTaskForm.style.display = 'none';
-                addTaskBtn.innerHTML = '<i class="fas fa-plus"></i> Add New Task';
-                
-                // Refresh the view
-                renderTasks();
+                title: `Task #${task.id} Details`,
+                html: `
+                    <div style="text-align: left;">
+                        <div style="margin-bottom: 15px;">
+                            <h3 style="margin-bottom: 5px;">${task.description}</h3>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span><strong>Assigned To:</strong> ${task.assignedTo}</span>
+                                <span><strong>Priority:</strong> <span class="priority-${task.priority}">${task.priority}</span></span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Due Date:</strong> ${formattedDate}
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Status:</strong> 
+                                <span class="task-status ${task.status === 'done' ? 'completed' : task.status === 'in-progress' ? 'in-progress' : 'todo'}">
+                                    ${task.status === 'done' ? 'Completed' : task.status === 'in-progress' ? 'In Progress' : 'To Do'}
+                                </span>
+                            </div>
+                            ${task.status !== 'done' ? `
+                            <div style="margin-bottom: 10px;">
+                                <strong>Progress:</strong> ${task.progress}%
+                                <div class="progress-bar" style="margin-top: 5px;">
+                                    <div class="progress-fill" style="width: ${task.progress}%"></div>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="margin-bottom: 5px;">Dependencies</h4>
+                            ${dependenciesHtml}
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="margin-bottom: 5px;">Notes</h4>
+                            ${notesHtml}
+                        </div>
+                    </div>
+                `,
+                width: '700px',
+                confirmButtonColor: '#4a6bdf',
+                showCloseButton: true
             });
-        });
-
-        // Drag and drop functionality
-        let draggedItem = null;
-
-        function handleDragStart(e) {
-            draggedItem = this;
-            this.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.innerHTML);
         }
-
-        function handleDragEnd() {
-            this.classList.remove('dragging');
-            draggedItem = null;
-        }
-
-        // Add event listeners to all columns
-        document.querySelectorAll('.task-list').forEach(list => {
-            list.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                const afterElement = getDragAfterElement(this, e.clientY);
-                if (draggedItem) {
-                    if (afterElement) {
-                        this.insertBefore(draggedItem, afterElement);
-                    } else {
-                        this.appendChild(draggedItem);
-                    }
-                }
-            });
-            
-            list.addEventListener('drop', function(e) {
-                e.preventDefault();
-                const taskId = parseInt(draggedItem.dataset.id);
-                const task = tasks.find(t => t.id === taskId);
-                
-                // Determine new status based on column
-                let newStatus = 'todo';
-                if (this.id === 'inProgressList') {
-                    newStatus = 'in-progress';
-                } else if (this.id === 'doneList') {
-                    newStatus = 'done';
-                }
-                
-                // Update task status and progress if needed
-                if (newStatus === 'done') {
-                    task.progress = 100;
-                } else if (newStatus === 'in-progress' && task.progress === 0) {
-                    task.progress = 10; // Default progress when moved to in-progress
-                }
-                
-                task.status = newStatus;
-                
-                // Re-render to update counts and positions
-                renderTasks();
-            });
-        });
-
-        function getDragAfterElement(container, y) {
-            const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
-            
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-
-        // Toggle the new task form
-        addTaskBtn.addEventListener('click', function() {
-            if (newTaskForm.style.display === 'none') {
-                newTaskForm.style.display = 'block';
-                this.innerHTML = '<i class="fas fa-times"></i> Cancel';
-            } else {
-                newTaskForm.style.display = 'none';
-                this.innerHTML = '<i class="fas fa-plus"></i> Add New Task';
-            }
-        });
 
         // Initial render
         renderTasks();

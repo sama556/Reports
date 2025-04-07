@@ -222,3 +222,10 @@
 .swal2-popup .form-group {
     flex: 1;
 }
+label {
+    float: left;
+}
+.actions{
+    display: flex;
+    margin-top: 47px;
+}

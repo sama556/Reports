@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../css/comman.css">
     <link rel="stylesheet" href="../../css/kpi.css">
     <link rel="stylesheet" href="../../css/notification.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
@@ -30,16 +32,16 @@
     <div class="dashboard">
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">Project Name</h2>
-                <span class="project-status" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-chart-pie"></i>
@@ -53,7 +55,6 @@
                 <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
                 <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
                 <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
-                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
                 <li><a href="../../manager/viewProject/notifications.html"  class="active"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
             </ul>
@@ -77,6 +78,7 @@
                                     <label for="notificationRecipient">Recipient</label>
                                     <select id="notificationRecipient" required>
                                         <option value="">Select Recipient</option>
+                                        <option value="all">All</option>
                                         <option value="admin">Admin</option>
                                         <option value="analyst">Analyst</option>
                                     </select>
@@ -125,7 +127,6 @@
                 priority: "normal",
                 actions: [
                     { text: "Mark as Read", type: "read", id: 1 },
-                    { text: "View Task", type: "view", id: 1 }
                 ]
             },
             {
@@ -137,7 +138,7 @@
                 priority: "high",
                 actions: [
                     { text: "Mark as Read", type: "read", id: 2 },
-                    { text: "Add to Calendar", type: "calendar", id: 2 }
+                    
                 ]
             },
             {
@@ -149,7 +150,6 @@
                 priority: "normal",
                 actions: [
                     { text: "Mark as Unread", type: "unread", id: 3 },
-                    { text: "Refresh Data", type: "refresh", id: 3 }
                 ]
             },
             {
@@ -161,7 +161,7 @@
                 priority: "urgent",
                 actions: [
                     { text: "Mark as Unread", type: "unread", id: 4 },
-                    { text: "Review Design", type: "review", id: 4 }
+                
                 ]
             }
         ];
@@ -249,21 +249,7 @@
                 case 'read':
                     notification.isRead = true;
                     break;
-                case 'unread':
-                    notification.isRead = false;
-                    break;
-                case 'view':
-                    alert(`Viewing task for notification: ${notification.title}`);
-                    break;
-                case 'calendar':
-                    alert(`Adding to calendar: ${notification.title}`);
-                    break;
-                case 'refresh':
-                    alert(`Refreshing data for: ${notification.title}`);
-                    break;
-                case 'review':
-                    alert(`Reviewing design for: ${notification.title}`);
-                    break;
+        
             }
             
             renderNotifications();

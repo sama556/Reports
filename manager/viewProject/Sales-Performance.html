@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StratAnalytica | KPI Management</title>
+    <title>StratAnalytica | Sales Performance</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/comman.css"/>
-    <link rel="stylesheet" href="../../css/report.css">
+    <link rel="stylesheet" href="../../css/sales.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <header>
@@ -29,16 +27,16 @@
     <div class="dashboard">
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">Project Name</h2>
-                <span class="project-status" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-chart-pie"></i>
@@ -52,7 +50,7 @@
                 <li><a href="../../manager/viewProject/Sales-Performance.html" class="active"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
                 <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
                 <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
-                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
+
                 <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
             </ul>
@@ -63,21 +61,22 @@
                 <div class="container">
                     <h1>Sales Performance Management</h1>
             
-               
-            
                     <div class="actions">
-                        <button onclick="showAddForm()" class="action-btn">Add Report</button>
+                        <button onclick="showAddForm()" class="action-btn">Add Sales Record</button>
                     </div>
             
                     <table id="salesTable" class="sales-table">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Product/Service Sold</th>
-                                <th>Quantity Sold</th>
-                                <th>Revenue</th>
+                                <th>Product/Service</th>
                                 <th>Salesperson</th>
+                                <th>Customer</th>
+                                <th>Quantity</th>
+                                <th>Revenue</th>
                                 <th>Region</th>
+                                <th>Channel</th>
+                                <th>Payment</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -90,38 +89,78 @@
                     <div id="salesModal" class="modal">
                         <div class="modal-content">
                             <span class="close" onclick="closeModal()">&times;</span>
-                            <h2 id="modalTitle">Add Sales Report</h2>
+                            <h2 id="modalTitle">Add Sales Record</h2>
                             <form id="salesForm">
-                                <div class="form-group">
-                                    <label for="saleDate">Date:</label>
-                                    <input type="date" id="saleDate" required>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="saleDate">Date:</label>
+                                        <input type="date" id="saleDate" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product">Product/Service Sold:</label>
+                                        <input type="text" id="product" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="product">Product/Service Sold:</label>
-                                    <input type="text" id="product" required>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="salespersonId">Salesperson ID:</label>
+                                        <input type="text" id="salespersonId" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customerId">Customer ID:</label>
+                                        <input type="text" id="customerId" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="quantity">Quantity Sold:</label>
-                                    <input type="number" id="quantity" required>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity Sold:</label>
+                                        <input type="number" id="quantity" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="revenue">Revenue Generated:</label>
+                                        <input type="number" step="0.01" id="revenue" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="revenue">Revenue:</label>
-                                    <input type="number" step="0.01" id="revenue" required>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="region">Region/Location:</label>
+                                        <select id="region" required>
+                                            <option value="North">North</option>
+                                            <option value="South">South</option>
+                                            <option value="East">East</option>
+                                            <option value="West">West</option>
+                                            <option value="International">International</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salesChannel">Sales Channel:</label>
+                                        <select id="salesChannel" required>
+                                            <option value="Online">Online</option>
+                                            <option value="Retail">Retail</option>
+                                            <option value="Wholesale">Wholesale</option>
+                                            <option value="Direct">Direct Sales</option>
+                                            <option value="Partner">Partner</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="salesperson">Salesperson:</label>
-                                    <input type="text" id="salesperson" required>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="paymentMethod">Payment Method:</label>
+                                        <select id="paymentMethod" required>
+                                            <option value="Credit Card">Credit Card</option>
+                                            <option value="Debit Card">Debit Card</option>
+                                            <option value="Bank Transfer">Bank Transfer</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Digital Wallet">Digital Wallet</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="region">Region/Location:</label>
-                                    <select id="region" required>
-                                        <option value="North">North</option>
-                                        <option value="South">South</option>
-                                        <option value="East">East</option>
-                                        <option value="West">West</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="submit-btn">Save</button>
+                                
+                                <button type="submit" class="submit-btn">Save Record</button>
                             </form>
                         </div>
                     </div>
@@ -141,31 +180,40 @@
             function addSampleData() {
                 salesData = [
                     {
-                        id: 1,
+                        salesId: 1,
                         date: '2023-10-01',
                         product: 'Product A',
+                        salespersonId: 'SP001',
+                        customerId: 'CUST1001',
                         quantity: 10,
-                        revenue: 1000,
-                        salesperson: 'John Doe',
-                        region: 'North'
+                        revenue: 1000.50,
+                        region: 'North',
+                        salesChannel: 'Online',
+                        paymentMethod: 'Credit Card'
                     },
                     {
-                        id: 2,
+                        salesId: 2,
                         date: '2023-10-02',
                         product: 'Product B',
+                        salespersonId: 'SP002',
+                        customerId: 'CUST1002',
                         quantity: 15,
-                        revenue: 1500,
-                        salesperson: 'Jane Smith',
-                        region: 'South'
+                        revenue: 1500.75,
+                        region: 'South',
+                        salesChannel: 'Retail',
+                        paymentMethod: 'Debit Card'
                     },
                     {
-                        id: 3,
+                        salesId: 3,
                         date: '2023-10-03',
-                        product: 'Product C',
+                        product: 'Service C',
+                        salespersonId: 'SP003',
+                        customerId: 'CUST1003',
                         quantity: 8,
-                        revenue: 800,
-                        salesperson: 'Mike Johnson',
-                        region: 'East'
+                        revenue: 800.25,
+                        region: 'East',
+                        salesChannel: 'Direct',
+                        paymentMethod: 'Bank Transfer'
                     }
                 ];
                 updateTable();
@@ -179,13 +227,18 @@
                     row.innerHTML = `
                         <td>${sale.date}</td>
                         <td>${sale.product}</td>
+                        <td>${sale.salespersonId}</td>
+                        <td>${sale.customerId}</td>
                         <td>${sale.quantity}</td>
                         <td>$${sale.revenue.toFixed(2)}</td>
-                        <td>${sale.salesperson}</td>
                         <td>${sale.region}</td>
+                        <td>${sale.salesChannel}</td>
+                        <td>${sale.paymentMethod}</td>
                         <td>
-                            <button class="edit-btn" onclick="editSale(${sale.id})"> <i class="fas fa-edit"></i></button>
-                            <button class="delete-btn" onclick="deleteSale(${sale.id})">  <i class="fas fa-trash-alt"></i> </button>
+                            <div class="action">
+                            <button class="edit-btn" onclick="editSale(${sale.salesId})"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteSale(${sale.salesId})"><i class="fas fa-trash-alt"></i></button>
+                            </div>
                         </td>
                     `;
                     salesTableBody.appendChild(row);
@@ -195,63 +248,26 @@
             // Show Add Form
             window.showAddForm = function() {
                 currentEditId = null;
-                document.getElementById('modalTitle').textContent = 'Add Sales Report';
-                document.getElementById('saleDate').value = '';
-                document.getElementById('product').value = '';
-                document.getElementById('quantity').value = '';
-                document.getElementById('revenue').value = '';
-                document.getElementById('salesperson').value = '';
-                document.getElementById('region').value = 'North';
+                document.getElementById('modalTitle').textContent = 'Add Sales Record';
+                document.getElementById('salesForm').reset();
                 salesModal.style.display = 'block';
-            };
-
-            // Show Edit Form
-            window.showEditForm = function() {
-                if (salesData.length === 0) {
-                    Swal.fire('Info', 'No sales data available to edit', 'info');
-                    return;
-                }
-                
-                Swal.fire({
-                    title: 'Select Sale to Edit',
-                    input: 'select',
-                    inputOptions: salesData.reduce((options, sale) => {
-                        options[sale.id] = `${sale.date} - ${sale.product} (${sale.salesperson})`;
-                        return options;
-                    }, {}),
-                    showCancelButton: true,
-                    confirmButtonText: 'Edit'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const id = parseInt(result.value);
-                        const sale = salesData.find(s => s.id === id);
-                        if (sale) {
-                            currentEditId = id;
-                            document.getElementById('modalTitle').textContent = 'Edit Sales Report';
-                            document.getElementById('saleDate').value = sale.date;
-                            document.getElementById('product').value = sale.product;
-                            document.getElementById('quantity').value = sale.quantity;
-                            document.getElementById('revenue').value = sale.revenue;
-                            document.getElementById('salesperson').value = sale.salesperson;
-                            document.getElementById('region').value = sale.region;
-                            salesModal.style.display = 'block';
-                        }
-                    }
-                });
             };
 
             // Edit specific sale
             window.editSale = function(id) {
-                const sale = salesData.find(s => s.id === id);
+                const sale = salesData.find(s => s.salesId === id);
                 if (sale) {
                     currentEditId = id;
-                    document.getElementById('modalTitle').textContent = 'Edit Sales Report';
+                    document.getElementById('modalTitle').textContent = 'Edit Sales Record';
                     document.getElementById('saleDate').value = sale.date;
                     document.getElementById('product').value = sale.product;
+                    document.getElementById('salespersonId').value = sale.salespersonId;
+                    document.getElementById('customerId').value = sale.customerId;
                     document.getElementById('quantity').value = sale.quantity;
                     document.getElementById('revenue').value = sale.revenue;
-                    document.getElementById('salesperson').value = sale.salesperson;
                     document.getElementById('region').value = sale.region;
+                    document.getElementById('salesChannel').value = sale.salesChannel;
+                    document.getElementById('paymentMethod').value = sale.paymentMethod;
                     salesModal.style.display = 'block';
                 }
             };
@@ -263,24 +279,27 @@
                 const saleData = {
                     date: document.getElementById('saleDate').value,
                     product: document.getElementById('product').value,
+                    salespersonId: document.getElementById('salespersonId').value,
+                    customerId: document.getElementById('customerId').value,
                     quantity: parseInt(document.getElementById('quantity').value),
                     revenue: parseFloat(document.getElementById('revenue').value),
-                    salesperson: document.getElementById('salesperson').value,
-                    region: document.getElementById('region').value
+                    region: document.getElementById('region').value,
+                    salesChannel: document.getElementById('salesChannel').value,
+                    paymentMethod: document.getElementById('paymentMethod').value
                 };
                 
                 if (currentEditId) {
                     // Update existing sale
-                    const index = salesData.findIndex(s => s.id === currentEditId);
+                    const index = salesData.findIndex(s => s.salesId === currentEditId);
                     if (index !== -1) {
-                        salesData[index] = { ...saleData, id: currentEditId };
-                        Swal.fire('Success', 'Sale report updated successfully!', 'success');
+                        salesData[index] = { ...saleData, salesId: currentEditId };
+                        Swal.fire('Success', 'Sales record updated successfully!', 'success');
                     }
                 } else {
                     // Add new sale
-                    const newId = salesData.length > 0 ? Math.max(...salesData.map(s => s.id)) + 1 : 1;
-                    salesData.push({ ...saleData, id: newId });
-                    Swal.fire('Success', 'Sale report added successfully!', 'success');
+                    const newId = salesData.length > 0 ? Math.max(...salesData.map(s => s.salesId)) + 1 : 1;
+                    salesData.push({ ...saleData, salesId: newId });
+                    Swal.fire('Success', 'Sales record added successfully!', 'success');
                 }
                 
                 updateTable();
@@ -299,9 +318,9 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        salesData = salesData.filter(s => s.id !== id);
+                        salesData = salesData.filter(s => s.salesId !== id);
                         updateTable();
-                        Swal.fire('Deleted!', 'Sale report has been deleted.', 'success');
+                        Swal.fire('Deleted!', 'Sales record has been deleted.', 'success');
                     }
                 });
             };

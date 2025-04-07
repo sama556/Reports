@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../../css/kips-manger.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="stylesheet" href="../../css/dashboard.css">
 </head>
 <body>
     <header>
@@ -29,16 +29,16 @@
     <div class="dashboard">
         <aside class="sidebar">
             <div class="project-info">
-                <h2 id="projectName">Project Name</h2>
-                <span class="project-status" id="projectStatus">Active</span>
+                <h2 id="projectName">Digital Transformation Initiative</h2>
+                <span class="project-status active" id="projectStatus">Active</span>
                 
                 <div class="project-meta">
                     <i class="fas fa-calendar-alt"></i>
-                    <span id="projectDates">Jan 1, 2023 - Dec 31, 2023</span>
+                    <span id="projectDates">Mar 15, 2023 - Jun 30, 2023</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-user"></i>
-                    <span id="projectCreator">Created by: John Doe</span>
+                    <span id="projectCreator">Created by: Sarah Johnson</span>
                 </div>
                 <div class="project-meta">
                     <i class="fas fa-chart-pie"></i>
@@ -52,7 +52,6 @@
                 <li><a href="../../manager/viewProject/Sales-Performance.html"><i class="fas fa-chart-line"></i> Sales Performance</a></li>
                 <li><a href="../../manager/viewProject/feedback.html"><i class="fas fa-comment"></i> Feedback</a></li>
                 <li><a href="../../manager/viewProject/todo.html"><i class="fas fa-tasks"></i> To-do List</a></li>
-                <li><a href="../../manager/viewProject/budget.html"><i class="fas fa-wallet"></i> Budget</a></li>
                 <li><a href="../../manager/viewProject/notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
                 <li><a href="../../manager/viewProject/reports.html"><i class="fas fa-file-export"></i> Reports</a></li>
             </ul>
@@ -61,61 +60,71 @@
         <main class="main-content">
             <div class="card">
                 <div class="container">
-                    <h1><i class="fas fa-bullseye"></i> Key Performance Indicators (KPIs)</h1>
-                    <div class="tabs">
-                        <button class="tab-button active" data-tab="setGoals">Set Goals</button>
-                        <button class="tab-button" data-tab="updateKPIs">Update KPIs</button>
+                    <div class="kpi-header">
+                        <h1><i class="fas fa-bullseye"></i> Key Performance Indicators (KPIs)</h1>
+                        <button class="add-kpi-btn" id="addKpiBtn">
+                            <i class="fas fa-plus"></i> Add KPI
+                        </button>
                     </div>
-            
-                    <div id="setGoals" class="tab-content active">
-                        <h2><i class="fas fa-plus-circle"></i> Create New KPI</h2>
-                        <form id="kpiForm" class="kpi-form">
-                            <div class="form-group">
-                                <label for="kpiName"><i class="fas fa-tag"></i> KPI Name:</label>
-                                <input type="text" id="kpiName" placeholder="Enter KPI name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="kpiDescription"><i class="fas fa-align-left"></i> Description:</label>
-                                <textarea id="kpiDescription" placeholder="Describe this KPI" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="targetValue"><i class="fas fa-bullseye"></i> Target Value:</label>
-                                <input type="number" id="targetValue" placeholder="Enter target value" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="calculationMethod"><i class="fas fa-calculator"></i> Calculation Method:</label>
-                                <input type="text" id="calculationMethod" placeholder="How is this calculated?" required>
-                            </div>
-                            <button type="submit" class="submit-btn"><i class="fas fa-save"></i> Save KPI</button>
-                        </form>
+                    
+                    <div class="kpi-table-container">
+                        <table id="kpiTable" class="kpi-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-tag"></i> KPI Name</th>
+                                    <th><i class="fas fa-align-left"></i> Description</th>
+                                    <th><i class="fas fa-chart-bar"></i> Current</th>
+                                    <th><i class="fas fa-bullseye"></i> Target</th>
+                                    <th><i class="fas fa-percentage"></i> Progress</th>
+                                    <th><i class="fas fa-info-circle"></i> Status</th>
+                                    <th><i class="fas fa-cog"></i> Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kpiTableBody">
+                                <!-- KPIs will be dynamically added here -->
+                            </tbody>
+                        </table>
                     </div>
-            
-                    <div id="updateKPIs" class="tab-content">
-                        <h2><i class="fas fa-sync-alt"></i> Manage KPIs</h2>
-                        <div class="kpi-table-container">
-                            <table id="kpiTable" class="kpi-table">
-                                <thead>
-                                    <tr>
-                                        <th><i class="fas fa-tag"></i> KPI Name</th>
-                                        <th><i class="fas fa-align-left"></i> Description</th>
-                                        <th><i class="fas fa-chart-bar"></i> Current</th>
-                                        <th><i class="fas fa-bullseye"></i> Target</th>
-                                        <th><i class="fas fa-info-circle"></i> Status</th>
-                                        <th><i class="fas fa-cog"></i> Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="kpiTableBody">
-                                    <!-- KPIs will be dynamically added here -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="kpiChart" width="400" height="200"></canvas>
-                        </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="kpiChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
         </main>
+    </div>
+    
+    <!-- Add KPI Modal -->
+    <div id="kpiModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Add New KPI</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="kpiForm" class="kpi-form">
+                <div class="form-group">
+                    <label for="kpiName"><i class="fas fa-tag"></i> KPI Name:</label>
+                    <input type="text" id="kpiName" placeholder="Enter KPI name" required>
+                </div>
+                <div class="form-group">
+                    <label for="kpiDescription"><i class="fas fa-align-left"></i> Description:</label>
+                    <textarea id="kpiDescription" placeholder="Describe this KPI" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="targetValue"><i class="fas fa-bullseye"></i> Target Value:</label>
+                    <input type="number" id="targetValue" placeholder="Enter target value" required>
+                </div>
+                <div class="form-group">
+                    <label for="currentValue"><i class="fas fa-chart-line"></i> Current Value:</label>
+                    <input type="number" id="currentValue" placeholder="Enter current value" required>
+                </div>
+                <div class="form-group">
+                    <label for="calculationMethod"><i class="fas fa-calculator"></i> Calculation Method:</label>
+                    <input type="text" id="calculationMethod" placeholder="How is this calculated?" required>
+                </div>
+                <button type="submit" class="submit-btn"><i class="fas fa-save"></i> Save KPI</button>
+            </form>
+        </div>
     </div>
     
     <script>
@@ -138,73 +147,70 @@
                 currentValue: 42000,
                 calculationMethod: "Sales reports",
                 status: "Needs Attention"
+            },
+            {
+                id: 3,
+                name: "Website Traffic",
+                description: "Monthly unique visitors to website",
+                targetValue: 100000,
+                currentValue: 75000,
+                calculationMethod: "Google Analytics",
+                status: "On Track"
             }
         ];
 
-        // Tab functionality
-        function setupTabs() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
+        // DOM Elements
+        const modal = document.getElementById("kpiModal");
+        const addKpiBtn = document.getElementById("addKpiBtn");
+        const closeModal = document.getElementById("closeModal");
+        const kpiForm = document.getElementById("kpiForm");
 
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabName = button.getAttribute('data-tab');
-                    
-                    // Update active button
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    // Show corresponding content
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === tabName) {
-                            content.classList.add('active');
-                        }
-                    });
+        // Modal functionality
+        addKpiBtn.addEventListener("click", () => {
+            modal.style.display = "block";
+        });
 
-                    // Refresh chart if showing KPIs tab
-                    if (tabName === 'updateKPIs') {
-                        updateKPIChart();
-                    }
-                });
-            });
-        }
+        closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
 
         // KPI Form Handling
-        function setupKPIForm() {
-            const kpiForm = document.getElementById('kpiForm');
-            
-            kpiForm.addEventListener('submit', (e) => {
-                e.preventDefault();
+        kpiForm.addEventListener("submit", (e) => {
+            e.preventDefault();
 
-                const newKPI = {
-                    id: Date.now(),
-                    name: document.getElementById('kpiName').value,
-                    description: document.getElementById('kpiDescription').value,
-                    targetValue: parseFloat(document.getElementById('targetValue').value),
-                    currentValue: 0,
-                    calculationMethod: document.getElementById('calculationMethod').value,
-                    status: 'On Track'
-                };
+            const newKPI = {
+                id: Date.now(),
+                name: document.getElementById("kpiName").value,
+                description: document.getElementById("kpiDescription").value,
+                targetValue: parseFloat(document.getElementById("targetValue").value),
+                currentValue: parseFloat(document.getElementById("currentValue").value),
+                calculationMethod: document.getElementById("calculationMethod").value,
+                status: "On Track"
+            };
 
-                kpis.push(newKPI);
-                updateKPITable();
-                showSuccessAlert('KPI created successfully!');
-                kpiForm.reset();
-                
-                // Switch to KPIs tab to see the new entry
-                document.querySelector('.tab-button[data-tab="updateKPIs"]').click();
-            });
-        }
+            kpis.push(newKPI);
+            updateKPITable();
+            showSuccessAlert("KPI created successfully!");
+            kpiForm.reset();
+            modal.style.display = "none";
+        });
 
         // Update KPI Table
         function updateKPITable() {
-            const kpiTableBody = document.getElementById('kpiTableBody');
+            const kpiTableBody = document.getElementById("kpiTableBody");
             kpiTableBody.innerHTML = '';
             
             kpis.forEach(kpi => {
-                const statusClass = kpi.status.toLowerCase().replace(' ', '-');
-                const row = document.createElement('tr');
+                const progress = Math.round((kpi.currentValue / kpi.targetValue) * 100);
+                const statusClass = kpi.status.toLowerCase().replace(" ", "-");
+                
+                const row = document.createElement("tr");
                 
                 row.innerHTML = `
                     <td>${kpi.name}</td>
@@ -214,6 +220,12 @@
                                value="${kpi.currentValue}" min="0" step="0.01">
                     </td>
                     <td>${kpi.targetValue}</td>
+                    <td>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: ${progress}%;"></div>
+                            <span class="progress-text">${progress}%</span>
+                        </div>
+                    </td>
                     <td><span class="status-badge ${statusClass}">${kpi.status}</span></td>
                     <td class="actions">
                         <button class="action-btn edit-btn" data-id="${kpi.id}">
@@ -229,25 +241,25 @@
             });
 
             // Add event listeners to current value inputs
-            document.querySelectorAll('.current-value').forEach(input => {
-                input.addEventListener('change', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
+            document.querySelectorAll(".current-value").forEach(input => {
+                input.addEventListener("change", function() {
+                    const id = parseInt(this.getAttribute("data-id"));
                     const newValue = parseFloat(this.value) || 0;
                     updateKPIValue(id, newValue);
                 });
             });
 
             // Add event listeners to edit/delete buttons
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
+            document.querySelectorAll(".edit-btn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const id = parseInt(this.getAttribute("data-id"));
                     editKPI(id);
                 });
             });
 
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const id = parseInt(this.getAttribute("data-id"));
                     deleteKPI(id);
                 });
             });
@@ -262,7 +274,7 @@
                 kpi.currentValue = newValue;
                 updateKPIStatus(kpi);
                 updateKPITable();
-                showSuccessAlert('KPI value updated!');
+                showSuccessAlert("KPI value updated!");
             }
         }
 
@@ -271,13 +283,13 @@
             const progress = (kpi.currentValue / kpi.targetValue) * 100;
             
             if (progress >= 100) {
-                kpi.status = 'Achieved';
+                kpi.status = "Achieved";
             } else if (progress >= 75) {
-                kpi.status = 'On Track';
+                kpi.status = "On Track";
             } else if (progress >= 50) {
-                kpi.status = 'Needs Attention';
+                kpi.status = "Needs Attention";
             } else {
-                kpi.status = 'At Risk';
+                kpi.status = "At Risk";
             }
         }
 
@@ -287,17 +299,39 @@
             if (kpi) {
                 Swal.fire({
                     title: 'Edit KPI',
-                    html:
-                        `<input id="swal-name" class="swal2-input" placeholder="Name" value="${kpi.name}">` +
-                        `<textarea id="swal-desc" class="swal2-textarea" placeholder="Description">${kpi.description}</textarea>` +
-                        `<input id="swal-target" class="swal2-input" type="number" placeholder="Target" value="${kpi.targetValue}">` +
-                        `<input id="swal-method" class="swal2-input" placeholder="Calculation Method" value="${kpi.calculationMethod}">`,
+                    html: `
+                        <div class="swal-form-group">
+                            <label for="swal-name" class="swal-label">KPI Name:</label>
+                            <input id="swal-name" class="swal2-input" placeholder="Enter KPI name" value="${kpi.name}">
+                        </div>
+                        <div class="swal-form-group">
+                            <label for="swal-desc" class="swal-label">Description:</label>
+                            <textarea id="swal-desc" class="swal2-textarea" placeholder="Describe this KPI">${kpi.description}</textarea>
+                        </div>
+                        <div class="swal-form-group">
+                            <label for="swal-target" class="swal-label">Target Value:</label>
+                            <input id="swal-target" class="swal2-input" type="number" placeholder="Enter target value" value="${kpi.targetValue}">
+                        </div>
+                        <div class="swal-form-group">
+                            <label for="swal-current" class="swal-label">Current Value:</label>
+                            <input id="swal-current" class="swal2-input" type="number" placeholder="Enter current value" value="${kpi.currentValue}">
+                        </div>
+                        <div class="swal-form-group">
+                            <label for="swal-method" class="swal-label">Calculation Method:</label>
+                            <input id="swal-method" class="swal2-input" placeholder="How is this calculated?" value="${kpi.calculationMethod}">
+                        </div>
+                    `,
                     focusConfirm: false,
+                    customClass: {
+                        popup: 'swal-popup-with-labels',
+                        htmlContainer: 'swal-html-container-with-labels'
+                    },
                     preConfirm: () => {
                         return {
                             name: document.getElementById('swal-name').value,
                             description: document.getElementById('swal-desc').value,
                             targetValue: document.getElementById('swal-target').value,
+                            currentValue: document.getElementById('swal-current').value,
                             calculationMethod: document.getElementById('swal-method').value
                         }
                     }
@@ -306,6 +340,7 @@
                         kpi.name = result.value.name;
                         kpi.description = result.value.description;
                         kpi.targetValue = parseFloat(result.value.targetValue);
+                        kpi.currentValue = parseFloat(result.value.currentValue);
                         kpi.calculationMethod = result.value.calculationMethod;
                         updateKPIStatus(kpi);
                         updateKPITable();
@@ -314,128 +349,41 @@
                 });
             }
         }
-
         // Delete KPI
         function deleteKPI(id) {
             Swal.fire({
-                title: 'Delete KPI?',
+                title: "Delete KPI?",
                 text: "This action cannot be undone!",
-                icon: 'warning',
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Delete',
-                cancelButtonText: 'Cancel'
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed) {
                     kpis = kpis.filter(k => k.id !== id);
                     updateKPITable();
-                    showSuccessAlert('KPI deleted successfully!');
+                    showSuccessAlert("KPI deleted successfully!");
                 }
             });
         }
 
         // KPI Chart
-        function updateKPIChart() {
-    const ctx = document.getElementById('kpiChart').getContext('2d');
-    if (window.myChart) window.myChart.destroy();
-
-    if (kpis.length === 0) {
-        document.getElementById('kpiChart').style.display = 'none';
-        return;
-    }
-    
-    document.getElementById('kpiChart').style.display = 'block';
-
-    const labels = kpis.map(k => k.name);
-    const data = kpis.map(k => k.currentValue);
-    const targetData = kpis.map(k => k.targetValue);
-    const backgroundColors = kpis.map(k => {
-        const progress = (k.currentValue / k.targetValue) * 100;
-        return progress >= 100 ? 'rgba(75, 192, 192, 0.7)' : 
-               progress >= 75 ? 'rgba(54, 162, 235, 0.7)' :
-               progress >= 50 ? 'rgba(255, 206, 86, 0.7)' : 'rgba(255, 99, 132, 0.7)';
-    });
-
-    window.myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Current Value',
-                    data: data,
-                    backgroundColor: backgroundColors,
-                    borderColor: backgroundColors.map(c => c.replace('0.7', '1')),
-                    borderWidth: 1
-                },
-                {
-                    label: 'Target Value',
-                    data: targetData,
-                    backgroundColor: 'rgba(201, 203, 207, 0.5)',
-                    borderColor: 'rgba(201, 203, 207, 1)',
-                    borderWidth: 1,
-                    type: 'line',
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Values'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'KPIs'
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.dataset.label || '';
-                            const value = context.raw;
-                            const kpi = kpis[context.dataIndex];
-                            const progress = kpi ? Math.round((kpi.currentValue / kpi.targetValue) * 100) : 0;
-                            
-                            if (context.datasetIndex === 0) {
-                                return `${label}: ${value} (${progress}% of target)`;
-                            }
-                            return `${label}: ${value}`;
-                        }
-                    }
-                },
-                legend: {
-                    position: 'top',
-                }
-            }
-        }
-    });
-}
+     
         function showSuccessAlert(message) {
             Swal.fire({
-                icon: 'success',
-                title: 'Success',
+                icon: "success",
+                title: "Success",
                 text: message,
-                confirmButtonText: 'OK',
+                confirmButtonText: "OK",
                 timer: 2000
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setupTabs();
-            setupKPIForm();
+        // Initialize the page
+        document.addEventListener("DOMContentLoaded", () => {
             updateKPITable();
-        
-            document.querySelector('.tab-button').click();
         });
     </script>
 </body>
