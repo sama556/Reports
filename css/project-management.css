@@ -155,3 +155,71 @@ tr:hover {
 label {
     float: left;
 }
+
+.multi-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.multi-select-container select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.selected-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.selected-option {
+    background-color: #e1f0ff;
+    border: 1px solid #b8daff;
+    border-radius: 3px;
+    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.selected-option .remove-option {
+    margin-left: 5px;
+    cursor: pointer;
+    color: #666;
+}
+
+/* Custom styling for SweetAlert2 */
+.checkbox-container {
+    text-align: left;
+    margin-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.swal2-input-container {
+    margin-bottom: 15px;
+}
+
+.swal2-input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}

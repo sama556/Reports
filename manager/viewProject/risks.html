@@ -106,7 +106,6 @@
                                     <th><i class="fas fa-bolt"></i> Impact</th>
                                     <th><i class="fas fa-calculator"></i> Risk Level</th>
                                     <th><i class="fas fa-flag"></i> Status</th>
-                                    <th><i class="fas fa-user"></i> Owner</th>
                                     <th><i class="fas fa-calendar"></i> Created</th>
                                     <th><i class="fas fa-sync-alt"></i> Updated</th>
                                     <th><i class="fas fa-cog"></i> Actions</th>
@@ -128,7 +127,7 @@
             const riskTableBody = document.getElementById('riskTableBody');
             const addRiskBtn = document.getElementById('addRiskBtn');
             
-            // Sample data - in a real app, this would come from your database
+    
             let risks = [
                 {
                     Risk_ID: 1,
@@ -140,7 +139,6 @@
                     Status: "Open",
                     Created_At: "2023-05-15T10:30:00",
                     Updated_At: "2023-05-20T14:45:00",
-                    Owner: "Security Team"
                 },
                 {
                     Risk_ID: 2,
@@ -152,7 +150,7 @@
                     Status: "In Progress",
                     Created_At: "2023-05-10T09:15:00",
                     Updated_At: "2023-05-18T11:20:00",
-                    Owner: "HR Department"
+                    
                 },
                 {
                     Risk_ID: 3,
@@ -164,7 +162,7 @@
                     Status: "Open",
                     Created_At: "2023-05-05T13:00:00",
                     Updated_At: "2023-05-05T13:00:00",
-                    Owner: "Procurement Team"
+                
                 }
             ];
             
@@ -223,11 +221,6 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="swal-owner">Risk Owner:</label>
-                                <input type="text" id="swal-owner" class="swal2-input" placeholder="Person responsible" required>
-                            </div>
-                            
-                            <div class="form-group">
                                 <label for="swal-status">Status:</label>
                                 <select id="swal-status" class="swal2-select" required>
                                     <option value="Open">Open</option>
@@ -245,10 +238,9 @@
                         const likelihood = document.getElementById('swal-likelihood').value;
                         const impact = document.getElementById('swal-impact').value;
                         const mitigation = document.getElementById('swal-mitigation').value;
-                        const owner = document.getElementById('swal-owner').value;
                         const status = document.getElementById('swal-status').value;
                         
-                        if (!description || !likelihood || !impact || !mitigation || !owner || !status) {
+                        if (!description || !likelihood || !impact || !mitigation  || !status) {
                             Swal.showValidationMessage('Please fill in all fields');
                             return false;
                         }
@@ -275,13 +267,12 @@
                 
                 const newRisk = {
                     Risk_ID: risks.length > 0 ? Math.max(...risks.map(r => r.Risk_ID)) + 1 : 1,
-                    Project_ID: 1, // Would come from your actual project context
+                    Project_ID: 1,
                     Risk_Description: riskData.description,
                     Likelihood: riskData.likelihood,
                     Impact: riskData.impact,
                     Mitigation_Strategy: riskData.mitigation,
                     Status: riskData.status,
-                    Owner: riskData.owner,
                     Created_At: now,
                     Updated_At: now
                 };
@@ -325,7 +316,6 @@
                         <td>${risk.Impact}</td>
                         <td><span class="status-badge ${riskLevel.toLowerCase()}">${riskLevel}</span></td>
                         <td>${risk.Status}</td>
-                        <td>${risk.Owner}</td>
                         <td>${createdDate}</td>
                         <td>${updatedDate}</td>
                         <td class="actions">
@@ -409,14 +399,8 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="edit-owner">Risk Owner:</label>
-                                <input type="text" id="edit-owner" class="swal2-input" value="${risk.Owner}" required>
-                            </div>
-                            
-                            <div class="form-group">
                                 <label for="edit-status">Status:</label>
                                 <select id="edit-status" class="swal2-select" required>
-                                    <option value="Open" ${risk.Status === 'Open' ? 'selected' : ''}>Open</option>
                                     <option value="In Progress" ${risk.Status === 'In Progress' ? 'selected' : ''}>In Progress</option>
                                     <option value="Resolved" ${risk.Status === 'Resolved' ? 'selected' : ''}>Resolved</option>
                                     <option value="Closed" ${risk.Status === 'Closed' ? 'selected' : ''}>Closed</option>

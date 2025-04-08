@@ -29,7 +29,7 @@
         <aside class="sidebar">
             <ul class="sidebar-menu">
                 <li><span class="role-badge role-admin">Manager</span></li>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="view-projects.html" class="active"><i class="fas fa-chart-line"></i> View Projects</a></li>
                 <li><a href="../manager/updateprofile.html"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
@@ -314,21 +314,6 @@
             dateFilter.value = '';
             searchInput.value = '';
             renderProjects(projects);
-        }
-        
-        // Navigate to project dashboard
-        function navigateToProjectDashboard(projectId) {
-            // In a real application, this would redirect to the project dashboard page
-            // For this demo, we'll show a message
-            Swal.fire({
-                title: 'Navigating to Project Dashboard',
-                text: `You are viewing dashboard for project ID: ${projectId}`,
-                icon: 'info',
-                confirmButtonText: 'Okay'
-            }).then(() => {
-                // In a real app, you would redirect here
-                window.location.href = `project-dashboard.html?id=${projectId}`;
-            });
         }
         
         // Helper functions

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard | StratAnalytica</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/comman.css"/>
+    <link rel="stylesheet" href="../css/dash.css"/>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>StratAnalytica</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="update-profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="../langingPage.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><span class="badge badge-admin">Admin</span></li>
+                <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="user-mangement.html"><i class="fas fa-users"></i> <span>User Management</span></a></li>
+                <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> <span>Project Management</span></a></li>
+                <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> <span>View Projects</span></a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Project Dashboard</h1>
+                <div class="date-filter">
+                    <span>Welcome, Admin</span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid">
+                <div class="info-card info-card-primary">
+                    <h3>Total Projects</h3>
+                    <p id="totalProjects">0</p>
+                </div>
+                <div class="info-card info-card-success">
+                    <h3>Active Projects</h3>
+                    <p id="activeProjects">0</p>
+                </div>
+                <div class="info-card info-card-warning">
+                    <h3>Pending Projects</h3>
+                    <p id="pendingProjects">0</p>
+                </div>
+                <div class="info-card info-card-danger">
+                    <h3>Completed Projects</h3>
+                    <p id="completedProjects">0</p>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="chart-grid">
+                <!-- Project Status Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Project Status Overview</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="projectStatusChart"></canvas>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="status-circle status-active"></span>
+                                <span>Active</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="status-circle status-pending"></span>
+                                <span>Pending</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="status-circle status-completed"></span>
+                                <span>Completed</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="status-circle status-cancelled"></span>
+                                <span>Cancelled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Timeline Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Project Timeline</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="projectTimelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second row of charts -->
+            <div class="chart-grid">
+                <!-- Team Members -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Team Members</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="teamMembersContainer">
+                            <!-- Team members will be loaded here via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline" id="activityTimeline">
+                            <!-- Activity timeline will be loaded here via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.29.3/date_fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.min.js"></script>
+    <script>
+        // Sample data (this would typically come from a database)
+const users = [
+    { User_ID: 1, Username: "samaahmed", Email: "john@example.com", Role: "manager", Name: "sama ahmed" },
+    { User_ID: 2, Username: "aliahmed", Email: "jane@example.com", Role: "manager", Name: "ali ahmed" },
+    { User_ID: 3, Username: "marwan", Email: "mike@example.com", Role: "analyst", Name: "marwan ramez" },
+    { User_ID: 4, Username: "sarah", Email: "sarah@example.com", Role: "analyst", Name: "Sarah kamel" },
+    { User_ID: 5, Username: "ahmad", Email: "ahmad@example.com", Role: "analyst", Name: "Ahmad Al-Faisal" },
+    { User_ID: 6, Username: "nora", Email: "nora@example.com", Role: "analyst", Name: "Nora Al-Harbi" }
+];
+
+const projects = [
+    {
+        Project_ID: 1,
+        Project_Name: "Website Redesign",
+        Description: "Complete redesign of company website with modern UI/UX",
+        Start_Date: "2023-05-01",
+        End_Date: "2023-07-15",
+        Status: "completed",
+        Created_By: 1, // References User_ID 1 (John Doe)
+        Last_Updated: "2023-07-10T14:30:00Z",
+        Team_Members: [1, 3, 4] // John, Mike, Sarah
+    },
+    {
+        Project_ID: 2,
+        Project_Name: "Mobile App Development",
+        Description: "Development of cross-platform mobile application",
+        Start_Date: "2023-06-10",
+        End_Date: "2023-09-30",
+        Status: "active",
+        Created_By: 2, 
+        Last_Updated: "2023-08-15T10:45:00Z",
+        Team_Members: [2, 3, 5] 
+    },
+    {
+        Project_ID: 3,
+        Project_Name: "CRM Implementation",
+        Description: "Implementation of new CRM system for sales team",
+        Start_Date: "2023-07-15",
+        End_Date: "2023-10-20",
+        Status: "pending",
+        Created_By: 3, 
+        Last_Updated: "2023-07-20T16:20:00Z",
+        Team_Members: [1, 2, 6] 
+    }
+];
+
+// Initialize charts and variables
+let projectStatusChart = null;
+let projectTimelineChart = null;
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', () => {
+    updateStatCards();
+    renderProjectStatusChart();
+    renderProjectTimelineChart();
+    renderTeamMembers();
+    renderActivityTimeline();
+});
+
+// Update stat cards
+function updateStatCards() {
+    document.getElementById('totalProjects').textContent = projects.length;
+    document.getElementById('activeProjects').textContent = projects.filter(p => p.Status === 'active').length;
+    document.getElementById('pendingProjects').textContent = projects.filter(p => p.Status === 'pending').length;
+    document.getElementById('completedProjects').textContent = projects.filter(p => p.Status === 'completed').length;
+}
+
+// Render Project Status Chart
+function renderProjectStatusChart() {
+    const statusCounts = {
+        active: projects.filter(p => p.Status === 'active').length,
+        pending: projects.filter(p => p.Status === 'pending').length,
+        completed: projects.filter(p => p.Status === 'completed').length,
+        cancelled: projects.filter(p => p.Status === 'cancelled').length || 0 // In case there are no cancelled projects
+    };
+
+    const ctx = document.getElementById('projectStatusChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (projectStatusChart) {
+        projectStatusChart.destroy();
+    }
+    
+    projectStatusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Pending', 'Completed', 'Cancelled'],
+            datasets: [{
+                data: [statusCounts.active, statusCounts.pending, statusCounts.completed, statusCounts.cancelled],
+                backgroundColor: ['#1cc88a', '#f6c23e', '#4e73df', '#e74a3b'],
+                hoverBackgroundColor: ['#17a673', '#dda20a', '#2e59d9', '#be3e32'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Render Project Timeline Chart
+function renderProjectTimelineChart() {
+    // Sort projects by start date
+    const sortedProjects = [...projects].sort((a, b) => new Date(a.Start_Date) - new Date(b.Start_Date));
+    
+    // Extract data for the chart
+    const projectNames = sortedProjects.map(p => p.Project_Name);
+    
+    // Calculate project durations in days
+    const durations = sortedProjects.map(project => {
+        const startDate = new Date(project.Start_Date);
+        const endDate = new Date(project.End_Date);
+        return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)); // Convert to days
+    });
+    
+    // Generate colors based on status
+    const colors = sortedProjects.map(project => {
+        switch(project.Status) {
+            case 'active': return '#1cc88a';
+            case 'pending': return '#f6c23e';
+            case 'completed': return '#4e73df';
+            case 'cancelled': return '#e74a3b';
+            default: return '#6c757d';
+        }
+    });
+    
+    const ctx = document.getElementById('projectTimelineChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (projectTimelineChart) {
+        projectTimelineChart.destroy();
+    }
+    
+    // Create a horizontal bar chart instead of a time scale chart
+    projectTimelineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: projectNames,
+            datasets: [{
+                label: 'Duration (days)',
+                data: durations,
+                backgroundColor: colors,
+                borderColor: colors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y', // Horizontal bar chart
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        afterLabel: function(context) {
+                            const index = context.dataIndex;
+                            const project = sortedProjects[index];
+                            return [
+                                `Start: ${formatDate(project.Start_Date)}`,
+                                `End: ${formatDate(project.End_Date)}`,
+                                `Status: ${capitalizeFirstLetter(project.Status)}`
+                            ];
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Duration (days)'
+                    },
+                    beginAtZero: true
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Projects'
+                    }
+                }
+            }
+        }
+    });
+}
+// Render Team Members
+function renderTeamMembers() {
+    const teamMembersContainer = document.getElementById('teamMembersContainer');
+    teamMembersContainer.innerHTML = '';
+    
+    // Calculate projects per user
+    const projectsPerUser = {};
+    users.forEach(user => {
+        projectsPerUser[user.User_ID] = projects.filter(p => 
+            p.Team_Members && p.Team_Members.includes(user.User_ID)
+        ).length;
+    });
+    
+    // Sort users by number of projects (descending)
+    const sortedUsers = [...users].sort((a, b) => 
+        projectsPerUser[b.User_ID] - projectsPerUser[a.User_ID]
+    );
+    
+    // Create team member cards
+    sortedUsers.forEach(user => {
+        const projectCount = projectsPerUser[user.User_ID];
+        const initials = user.Name.split(' ').map(n => n[0]).join('').toUpperCase();
+        
+        const teamMemberCard = document.createElement('div');
+        teamMemberCard.className = 'team-member-card';
+        teamMemberCard.innerHTML = `
+            <div class="team-member-avatar">${initials}</div>
+            <div class="team-member-info">
+                <div class="team-member-name">${user.Name}</div>
+                <div class="team-member-role">${capitalizeFirstLetter(user.Role)}</div>
+            </div>
+            <div class="team-member-projects">${projectCount} Projects</div>
+        `;
+        
+        teamMembersContainer.appendChild(teamMemberCard);
+    });
+}
+
+// Render Activity Timeline
+function renderActivityTimeline() {
+    const timelineContainer = document.getElementById('activityTimeline');
+    timelineContainer.innerHTML = '';
+    
+    // Sort projects by last updated (most recent first)
+    const sortedProjects = [...projects].sort((a, b) => 
+        new Date(b.Last_Updated) - new Date(a.Last_Updated)
+    );
+    
+    // Create timeline items
+    sortedProjects.forEach(project => {
+        const creator = users.find(u => u.User_ID === project.Created_By);
+        const creatorName = creator ? creator.Name : 'Unknown User';
+        
+        const timelineItem = document.createElement('div');
+        timelineItem.className = 'timeline-item';
+        timelineItem.innerHTML = `
+            <div class="timeline-header">
+                <div class="timeline-project">${project.Project_Name}</div>
+                <div class="timeline-date">${formatDateTime(project.Last_Updated)}</div>
+            </div>
+            <div class="timeline-body">
+                <p>Status: <strong>${capitalizeFirstLetter(project.Status)}</strong></p>
+                <p>Created by: ${creatorName}</p>
+            </div>
+        `;
+        
+        timelineContainer.appendChild(timelineItem);
+    });
+}
+
+// Helper functions
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+function formatDateTime(dateTimeString) {
+    const options = { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return new Date(dateTimeString).toLocaleString(undefined, options);
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+    </script>
+</body>
+</html>

@@ -17,7 +17,6 @@
             </a>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
                     <li><a href="update-profile.html"><i class="fas fa-user"></i> Profile</a></li>
                     <li><a href="../langingPage.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
@@ -30,7 +29,7 @@
         <aside class="sidebar">
             <ul class="sidebar-menu">
                 <li><span class="role-badge role-admin">Admin</span></li>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="user-mangement.html"><i class="fas fa-users"></i> User Management</a></li>
                 <li><a href="Project-management.html"><i class="fas fa-project-diagram"></i> Project management</a></li>
                 <li><a href="view-projects.html" class="active"><i class="fas fa-chart-line"></i> View Projects</a></li>
@@ -317,23 +316,7 @@
             searchInput.value = '';
             renderProjects(projects);
         }
-        
-        // Navigate to project dashboard
-        function navigateToProjectDashboard(projectId) {
-            // In a real application, this would redirect to the project dashboard page
-            // For this demo, we'll show a message
-            Swal.fire({
-                title: 'Navigating to Project Dashboard',
-                text: `You are viewing dashboard for project ID: ${projectId}`,
-                icon: 'info',
-                confirmButtonText: 'Okay'
-            }).then(() => {
-                // In a real app, you would redirect here
-                window.location.href = `project-dashboard.html?id=${projectId}`;
-            });
-        }
-        
-        // Helper functions
+   
         function formatDate(dateString) {
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
             return new Date(dateString).toLocaleDateString(undefined, options);

@@ -107,20 +107,7 @@
         margin-top: 5px;
     }
     
-    .role-admin {
-        background-color: var(--primary-color);
-        color: white;
-    }
-    
-    .role-user {
-        background-color: var(--success-color);
-        color: white;
-    }
-    
-    .role-manager {
-        background-color: var(--warning-color);
-        color: white;
-    }
+ 
     
     .stats-container {
         display: flex;
@@ -359,7 +346,7 @@
         <aside class="sidebar">
             <ul class="sidebar-menu">
                 <li><span class="role-badge role-admin">Manager</span></li>
-                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="view-projects.html"><i class="fas fa-chart-line"></i> View Projects</a></li>
                 <li><a href="update-profile.html" class="active" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
             
@@ -374,12 +361,8 @@
                 </div>
                 <div class="card-body">
                     <div class="profile-section">
-                        <div class="profile-image" id="avatarContainer">
-                            <img src="" alt="Profile Image" id="profileImage" style="display: none;">
-                            <div class="initials" id="avatarInitials">MA</div>
-                        </div>
                         <div class="profile-info">
-                            <h3 id="profileName">Manager User</h3>
+                            <h3 id="profileName">Sara Alaa</h3>
                             <span class="role-badge role-admin" id="profileRole">Manager</span>
                         </div>
                     </div>
@@ -407,7 +390,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" class="form-control" value="manager" readonly>
+                                <input type="text" id="username" class="form-control" value="sara Alaa" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
@@ -424,26 +407,12 @@
                             </select>
                         </div>
                         
-                        <div class="form-group">
-                            <label>Profile Picture</label>
-                            <div class="file-upload">
-                                <label for="avatar" class="file-upload-label">
-                                    <i class="fas fa-camera"></i> Choose Image
-                                </label>
-                                <input type="file" id="avatar" class="file-upload-input" accept="image/*">
-                            </div>
-                            <small class="text-muted">Recommended size: 200x200 pixels</small>
-                        </div>
-                        
                         <div class="btn-group">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Profile
                             </button>
                             <button type="button" id="changePasswordBtn" class="btn btn-warning">
                                 <i class="fas fa-key"></i> Change Password
-                            </button>
-                            <button type="button" id="deleteAccountBtn" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Delete Account
                             </button>
                         </div>
                     </form>
@@ -454,11 +423,10 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Sample user data matching your table structure
         const userData = {
             User_ID: 1,
-            Username: "manager",
-            Password: "hashed_password_placeholder", // In a real app, this would be hashed
+            Username: "Sara ALaa",
+            Password: "hashed_password_placeholder", 
             Email: "manager@example.com",
             Role: "manger",
             Created_At: "2023-01-15T08:00:00Z",
@@ -468,8 +436,6 @@
         
         // DOM Elements
         const profileForm = document.getElementById('profileForm');
-        const profileImage = document.getElementById('profileImage');
-        const avatarInitials = document.getElementById('avatarInitials');
         const profileName = document.getElementById('profileName');
         const profileRole = document.getElementById('profileRole');
         const userId = document.getElementById('userId');
@@ -479,9 +445,7 @@
         const usernameInput = document.getElementById('username');
         const emailInput = document.getElementById('email');
         const roleSelect = document.getElementById('role');
-        const avatarInput = document.getElementById('avatar');
         const changePasswordBtn = document.getElementById('changePasswordBtn');
-        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
         
         // Initialize profile with user data
         function initProfile() {
@@ -500,8 +464,6 @@
             updatedAt.textContent = formatDate(userData.Updated_At);
             lastLogin.textContent = formatDateTime(userData.Last_Login);
             
-            // Set avatar initials from username
-            updateAvatarInitials(userData.Username);
         }
         
         // Format date (YYYY-MM-DD)
@@ -515,53 +477,6 @@
             const date = new Date(dateString);
             return `${date.toISOString().split('T')[0]} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
         }
-        
-        // Update avatar initials
-        function updateAvatarInitials(username) {
-            const initials = username.substring(0, 2).toUpperCase();
-            avatarInitials.textContent = initials;
-            profileName.textContent = username;
-        }
-        
-        // Handle profile image upload
-        avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                if (!file.type.match('image.*')) {
-                    Swal.fire('Error', 'Please select an image file', 'error');
-                    return;
-                }
-                
-                if (file.size > 2 * 1024 * 1024) {
-                    Swal.fire('Error', 'Image size should be less than 2MB', 'error');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    profileImage.src = event.target.result;
-                    profileImage.style.display = 'block';
-                    avatarInitials.style.display = 'none';
-                    
-                    // Show preview
-                    Swal.fire({
-                        title: 'Profile Picture',
-                        imageUrl: event.target.result,
-                        imageAlt: 'Profile image preview',
-                        showCancelButton: true,
-                        confirmButtonText: 'Use this image',
-                        cancelButtonText: 'Cancel',
-                    }).then((result) => {
-                        if (!result.isConfirmed) {
-                            profileImage.style.display = 'none';
-                            avatarInitials.style.display = 'block';
-                            avatarInput.value = '';
-                        }
-                    });
-                };
-                reader.readAsDataURL(file);
-            }
-        });
         
         // Handle profile form submission
         profileForm.addEventListener('submit', function(e) {
@@ -579,8 +494,7 @@
                 Swal.fire('Error', 'Please enter a valid email address', 'error');
                 return;
             }
-            
-            // Update user data (in a real app, this would be an API call)
+    
             userData.Email = email;
             userData.Updated_At = new Date().toISOString();
             updatedAt.textContent = formatDateTime(userData.Updated_At);
@@ -596,10 +510,6 @@
         
         // Change password button
         changePasswordBtn.addEventListener('click', showChangePasswordModal);
-        
-        // Delete account button
-        deleteAccountBtn.addEventListener('click', showDeleteAccountModal);
-        
         // Email validation
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -668,43 +578,6 @@
             });
         }
         
-        // Show delete account modal
-        function showDeleteAccountModal() {
-            Swal.fire({
-                title: 'Delete Account',
-                text: "Are you sure you want to delete your account? This action cannot be undone.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // In a real app, you would send a delete request to your server
-                    Swal.fire(
-                        'Deleted!',
-                        'Your account has been deleted.',
-                        'success'
-                    ).then(() => {
-                        // Redirect to login page
-                        window.location.href = '../langingPage.html';
-                    });
-                }
-            });
-        }
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            initProfile();
-            
-            // Check for saved profile image
-            const savedImage = localStorage.getItem('profileImage');
-            if (savedImage) {
-                profileImage.src = savedImage;
-                profileImage.style.display = 'block';
-                avatarInitials.style.display = 'none';
-            }
-        });
     </script>
 </body>
 </html>
